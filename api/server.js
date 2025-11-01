@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // Importaciones dinámicas para las funciones de API
-let userAPI, favoritesAPI, watchlistAPI, movieAnalysisAPI;
+let userAPI, favoritesAPI, watchlistAPI, movieAnalysisAPI, chatAPI;
 
 async function initializeAPIs() {
   try {
@@ -19,11 +19,13 @@ async function initializeAPIs() {
     const favoritesModule = await import('../src/api/favorites.ts');
     const watchlistModule = await import('../src/api/watchlist.ts');
     const movieAnalysisModule = await import('../src/api/movie-analysis.ts');
+    const chatModule = await import('../src/api/chat.ts');
     
     userAPI = userModule;
     favoritesAPI = favoritesModule;
     watchlistAPI = watchlistModule;
     movieAnalysisAPI = movieAnalysisModule;
+    chatAPI = chatModule;
   } catch (error) {
     console.error('Error loading API modules:', error);
   }
@@ -174,6 +176,40 @@ app.post('/api/actor-details', async (req, res) => {
   } catch (error) {
     console.error('Actor details error:', error);
     res.status(500).json({ error: 'Error fetching actor details' });
+  }
+});
+
+// Chat endpoint
+app.post('/api/chat', async (req, res) => {
+  try {
+    const { message, context } = req.body;
+    
+    if (!message) {
+      return res.status(400).json({ error: 'Message is required' });
+    }
+
+    const response = await chatAPI.getChatResponse(message, context || {});
+    res.json({ response });
+  } catch (error) {
+    console.error('Error in chat endpoint:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Recommendations endpoint
+app.post('/api/recommendations', async (req, res) => {
+  try {
+    const { contentType, contentData } = req.body;
+    
+    if (!contentType || !contentData) {
+      return res.status(400).json({ error: 'Content type and data are required' });
+    }
+
+    const recommendations = await chatAPI.getRecommendations(contentType, contentData);
+    res.json({ recommendations });
+  } catch (error) {
+    console.error('Error getting recommendations:', error);
+    res.status(500).json({ error: error.message });
   }
 });
 

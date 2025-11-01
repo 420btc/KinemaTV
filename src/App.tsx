@@ -11,6 +11,7 @@ import SignIn from "./pages/SignIn";
 import SignOut from "./pages/SignOut";
 import OAuthCallback from "./pages/OAuthCallback";
 import { AuthButton } from "./components/AuthButton";
+import { ChatPopup } from "./components/ChatPopup";
 import { useState, useEffect } from "react";
 import type { FormEvent } from "react";
 import { Toaster } from "react-hot-toast";
@@ -185,6 +186,9 @@ function App() {
           success: { iconTheme: { primary: "#FACC15", secondary: "#1A2233" } },
         }}
       />
+
+      {/* Chat Popup */}
+      <ChatPopup />
     </div>
   );
 }

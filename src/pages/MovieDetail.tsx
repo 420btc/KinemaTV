@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { getMovieDetails } from "../services/tmdb";
 import { FavoriteButton } from "../components/FavoriteButton";
 import { WatchlistButton } from "../components/WatchlistButton";
+import { SendToChatButton } from "../components/SendToChatButton";
 import { fetchMovieAnalysis, fetchActorDetails } from "../services/movieAnalysis";
 import type { MovieAnalysis, ActorDetails } from "../api/openai";
 import type { FC } from "react";
@@ -138,6 +139,7 @@ const MovieDetail: FC = () => {
                         <div className="flex gap-2">
                             <FavoriteButton movie={movie} />
                             <WatchlistButton movie={movie} />
+                            <SendToChatButton movie={movie} type="movie" />
                         </div>
                     </div>
 

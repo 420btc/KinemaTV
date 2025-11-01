@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { getTVDetails } from "../services/tmdb";
+import { SendToChatButton } from "../components/SendToChatButton";
 import { fetchSeriesAnalysis, fetchActorDetails } from "../services/movieAnalysis";
 import type { SeriesAnalysis, ActorDetails } from "../api/openai";
 import type { FC } from "react";
@@ -152,12 +153,19 @@ const TVDetail: FC = () => {
 
                 {/* 🔹 Línea de metadatos + botón volver */}
                 <div className="flex justify-between items-center mb-3 flex-wrap gap-3">
-                    <p className="text-gray-400">
-                        ⭐ {tv.vote_average.toFixed(1)} | {tv.first_air_date} •{" "}
-                        {tv.number_of_seasons} temporadas ({tv.number_of_episodes} episodios)
-                    </p>
+                    <div className="flex items-center gap-4">
+                        <p className="text-gray-400">
+                            ⭐ {tv.vote_average.toFixed(1)} | {tv.first_air_date} •{" "}
+                            {tv.number_of_seasons} temporadas ({tv.number_of_episodes} episodios)
+                        </p>
+                        
+                        {/* Botón de enviar al chat */}
+                        <div className="flex gap-2">
+                            <SendToChatButton series={tv} type="tv" />
+                        </div>
+                    </div>
 
-                    {/* 🔙 Botón “Volver” (alineado al texto, flecha izquierda) */}
+                    {/* 🔙 Botón "Volver" (alineado al texto, flecha izquierda) */}
                     <motion.button
                         onClick={handleBack}
                         initial={{ opacity: 0, x: 20 }}
