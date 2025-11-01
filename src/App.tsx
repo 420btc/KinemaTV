@@ -62,7 +62,10 @@ function App() {
             <Link to="/season-challenge" className="hover:text-orange-400 transition">Temporadas</Link>
             <Link to="/favorites" className="hover:text-orange-400 transition">Favoritos</Link>
             <Link to="/watchlist" className="hover:text-orange-400 transition">Watchlist</Link>
+          </div>
 
+          {/* Right side - Search and Auth */}
+          <div className="hidden sm:flex items-center gap-4 ml-8">
             {/* Search */}
             <form
               onSubmit={handleSearch}
