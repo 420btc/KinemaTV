@@ -97,3 +97,41 @@
   scrollbar-color: #facc15 rgba(255, 255, 255, 0.05);
   scrollbar-width: thin;
 }
+
+/* Mejoras específicas para móvil - Comentarios */
+@media (max-width: 640px) {
+  .comments-section {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+    border-radius: 0.75rem;
+    max-width: calc(100vw - 1rem);
+    line-height: 1.6;
+  }
+  
+  .mobile-spacing {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  .mobile-spacing > * + * {
+    margin-top: 0.75rem;
+  }
+  
+  /* Mejorar tap targets para móvil */
+  button, .touch-manipulation {
+    min-height: 44px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  /* Prevenir zoom en inputs en iOS */
+  input[type="text"], textarea, input, textarea {
+    font-size: 16px !important;
+    min-height: 44px;
+  }
+  
+  /* Mejorar legibilidad en móvil */
+  .comments-section p {
+    line-height: 1.6;
+  }
+}
