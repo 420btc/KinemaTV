@@ -5,6 +5,7 @@ import { getMovieDetails } from "../services/tmdb";
 import { FavoriteButton } from "../components/FavoriteButton";
 import { WatchlistButton } from "../components/WatchlistButton";
 import { SendToChatButton } from "../components/SendToChatButton";
+import { CelestialSphere } from "../components/ui/celestial-sphere";
 import { fetchMovieAnalysis, fetchActorDetails } from "../services/movieAnalysis";
 import type { MovieAnalysis, ActorDetails } from "../api/openai";
 import type { FC } from "react";
@@ -112,7 +113,18 @@ const MovieDetail: FC = () => {
     );
 
     return (
-        <div className="relative max-w-6xl mx-auto p-4 sm:p-6 flex flex-col md:flex-row gap-8 animate-fadeIn">
+        <div className="relative min-h-screen">
+            {/* Shader de fondo */}
+            <CelestialSphere
+                hue={240}
+                speed={0.2}
+                zoom={1.8}
+                particleSize={2.5}
+                className="fixed top-0 left-0 w-full h-full z-0"
+            />
+            
+            {/* Contenido principal */}
+            <div className="relative z-10 max-w-6xl mx-auto p-4 sm:p-6 flex flex-col md:flex-row gap-8 animate-fadeIn">
             {/* 🎬 Poster */}
             {movie.poster_path && (
                 <img
@@ -512,6 +524,7 @@ const MovieDetail: FC = () => {
                         </motion.div>
                     </motion.div>
                 )}
+            </div>
             </div>
 
             {/* 🔘 Botón flotante (solo móvil) */}
