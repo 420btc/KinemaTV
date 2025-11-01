@@ -157,62 +157,9 @@ export default function TierList() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-10">
-          {/* Search Panel */}
-          <div className="xl:col-span-1">
-            <div className="bg-gray-800 rounded-lg p-8 sticky top-8">
-              <h3 className="text-2xl font-bold mb-6">🔍 Buscar Películas</h3>
-              
-              <div className="flex gap-2 mb-4">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                  placeholder="Buscar película..."
-                  className="flex-1 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:border-transparent"
-                />
-                <button
-                  onClick={handleSearch}
-                  disabled={isSearching}
-                  className="bg-gradient-to-r from-orange-400 to-yellow-400 text-black px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50"
-                >
-                  {isSearching ? "..." : "🔍"}
-                </button>
-              </div>
-
-              {/* Search Results */}
-              <div className="max-h-96 overflow-y-auto space-y-2">
-                {searchResults.map((movie) => (
-                  <div
-                    key={movie.id}
-                    draggable
-                    onDragStart={() => handleDragStart(movie)}
-                    className="flex items-center gap-3 p-2 bg-gray-700 rounded-lg cursor-grab hover:bg-gray-600 transition"
-                  >
-                    <img
-                      src={`https://image.tmdb.org/t/p/w154${movie.poster_path}`}
-                      alt={movie.title}
-                      className="w-20 h-30 object-cover rounded"
-                      crossOrigin="anonymous"
-                      onError={(e) => {
-                        e.currentTarget.src = '/placeholder-movie.png';
-                      }}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm truncate">{movie.title}</p>
-                      <p className="text-xs text-gray-400">
-                        {movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A'}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Tier List */}
-          <div className="xl:col-span-3">
+        <div className="flex flex-col xl:flex-row gap-8">
+          {/* Tier List - Principal */}
+          <div className="flex-1 order-1">
             <div ref={tierListRef} className="bg-gray-900 rounded-lg p-8">
               <h2 className="text-3xl font-bold mb-8 text-center">Mi Tier List de Películas</h2>
               
@@ -269,9 +216,75 @@ export default function TierList() {
                   </div>
                 ))}
               </div>
-            </div>
-          </div>
-        </div>
+             </div>
+           </div>
+
+           {/* Search Panel - Sidebar */}
+           <div className="w-full xl:w-80 order-2">
+             <div className="bg-gray-800 rounded-xl p-6 sticky top-8 border border-gray-700">
+               <h3 className="text-xl font-bold mb-4 text-orange-400">🔍 Buscar Películas</h3>
+               
+               <div className="flex gap-2 mb-4">
+                 <input
+                   type="text"
+                   value={searchQuery}
+                   onChange={(e) => setSearchQuery(e.target.value)}
+                   onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                   placeholder="Buscar película..."
+                   className="flex-1 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all placeholder-gray-400 text-sm"
+                 />
+                 <button
+                   onClick={handleSearch}
+                   disabled={isSearching}
+                   className="bg-gradient-to-r from-orange-400 to-yellow-400 text-black px-3 py-2 rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50 text-sm"
+                 >
+                   {isSearching ? "..." : "🔍"}
+                 </button>
+               </div>
+
+               {/* Search Results */}
+               <div className="max-h-96 overflow-y-auto space-y-2">
+                 {searchResults.length === 0 && searchQuery && !isSearching && (
+                   <div className="text-center text-gray-400 py-4">
+                     <p className="text-sm">No se encontraron películas</p>
+                   </div>
+                 )}
+                 {searchResults.map((movie) => (
+                   <div
+                     key={movie.id}
+                     draggable
+                     onDragStart={() => handleDragStart(movie)}
+                     className="flex items-center gap-2 p-2 bg-gray-700 rounded-lg cursor-grab hover:bg-gray-600 transition-all border border-gray-600/50 hover:border-orange-400/50"
+                   >
+                     <div className="flex-shrink-0">
+                       <img
+                         src={movie.poster_path ? `https://image.tmdb.org/t/p/w92${movie.poster_path}` : '/placeholder-movie.png'}
+                         alt={movie.title}
+                         className="w-12 h-18 object-cover rounded shadow-sm"
+                         crossOrigin="anonymous"
+                         onError={(e) => {
+                           e.currentTarget.src = '/placeholder-movie.png';
+                         }}
+                       />
+                     </div>
+                     <div className="flex-1 min-w-0">
+                       <p className="font-semibold text-xs text-white truncate mb-1">{movie.title}</p>
+                       <p className="text-xs text-gray-400">
+                         {movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A'}
+                       </p>
+                       {movie.vote_average > 0 && (
+                         <div className="flex items-center gap-1 mt-1">
+                           <span className="text-yellow-400 text-xs">⭐</span>
+                           <span className="text-xs text-gray-300">{movie.vote_average.toFixed(1)}</span>
+                         </div>
+                       )}
+                     </div>
+                   </div>
+                 ))}
+               </div>
+             </div>
+           </div>
+         </div>
       </div>
     </div>
   );
