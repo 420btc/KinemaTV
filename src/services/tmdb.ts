@@ -12,6 +12,17 @@ export interface Movie {
     first_air_date?: string; // fecha de lanzamiento para series
 }
 
+export interface Actor {
+    id: number;
+    name: string;
+    profile_path: string | null;
+    popularity: number;
+    known_for_department: string;
+    known_for: Movie[];
+    gender: number; // 1 = femenino, 2 = masculino
+    adult: boolean;
+}
+
 // 🎬 --- PELÍCULAS ---
 export async function getPopularMovies(): Promise<{ results: Movie[] }> {
     const res = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=es-ES&page=1`);
@@ -89,6 +100,50 @@ export async function getTVDetails(id: string) {
     if (!res.ok) {
         throw new Error("Error al obtener detalles de la serie");
     }
+    return res.json();
+}
+
+// 👥 --- ACTORES ---
+// 🔎 Buscar Actores
+export async function searchActors(query: string): Promise<{ results: Actor[] }> {
+    const res = await fetch(
+        `${BASE_URL}/search/person?api_key=${API_KEY}&language=es-ES&query=${encodeURIComponent(query)}`
+    );
+    if (!res.ok) throw new Error("Error al buscar actores");
+    return res.json();
+}
+
+// 🎭 Obtener actores populares
+export async function getPopularActors(): Promise<{ results: Actor[] }> {
+    const res = await fetch(`${BASE_URL}/person/popular?api_key=${API_KEY}&language=es-ES&page=1`);
+    if (!res.ok) throw new Error("Error al obtener actores populares");
+    return res.json();
+}
+
+// 📋 Detalles completos del actor
+export async function getActorDetails(id: string) {
+    const res = await fetch(
+        `${BASE_URL}/person/${id}?api_key=${API_KEY}&language=es-ES&append_to_response=movie_credits,tv_credits,images`
+    );
+    if (!res.ok) throw new Error("Error al obtener detalles del actor");
+    return res.json();
+}
+
+// 🎬 Filmografía del actor (solo películas)
+export async function getActorMovieCredits(id: string) {
+    const res = await fetch(
+        `${BASE_URL}/person/${id}/movie_credits?api_key=${API_KEY}&language=es-ES`
+    );
+    if (!res.ok) throw new Error("Error al obtener filmografía del actor");
+    return res.json();
+}
+
+// 📺 Filmografía del actor (solo series)
+export async function getActorTVCredits(id: string) {
+    const res = await fetch(
+        `${BASE_URL}/person/${id}/tv_credits?api_key=${API_KEY}&language=es-ES`
+    );
+    if (!res.ok) throw new Error("Error al obtener series del actor");
     return res.json();
 }
 

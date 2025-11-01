@@ -30,10 +30,8 @@ export async function handleMovieAnalysis(request: MovieAnalysisRequest): Promis
 }
 
 // Función para manejar detalles de actores
-export async function handleActorDetails(request: ActorDetailsRequest) {
+export async function handleActorDetails(actorName: string) {
   try {
-    const { actorName } = request;
-    
     if (!actorName) {
       throw new Error('Nombre del actor es requerido');
     }
