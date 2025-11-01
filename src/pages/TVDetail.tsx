@@ -564,20 +564,20 @@ const TVDetail: FC = () => {
                         ))}
                     </div>
                 </div>
-            </div>
-            </div>
 
-            {/* Sección de Comentarios */}
-            {tv && (
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <CommentsSection
-                        mediaId={tv.id}
-                        mediaType="tv"
-                        title={tv.name}
-                        posterPath={tv.poster_path || undefined}
-                    />
-                </div>
-            )}
+                {/* Sección de Comentarios */}
+                {tv && (
+                    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+                        <CommentsSection
+                            mediaId={tv.id}
+                            mediaType="tv"
+                            title={tv.name}
+                            posterPath={tv.poster_path || undefined}
+                        />
+                    </div>
+                )}
+            </div>
+            </div>
 
             {/* 🔘 Botón flotante (solo móvil) */}
             <motion.button

@@ -35,7 +35,18 @@ export function useComments({ mediaId, mediaType }: UseCommentsProps): UseCommen
       setCommentsCount(count);
     } catch (err: unknown) {
       console.error('Error loading comments:', err);
-      setError('Error al cargar los comentarios');
+      let errorMessage = 'Error al cargar los comentarios';
+      
+      if (err instanceof Error) {
+        errorMessage = `Error: ${err.message}`;
+      } else if (typeof err === 'string') {
+        errorMessage = err;
+      } else if (err && typeof err === 'object' && 'status' in err) {
+        const httpError = err as { status: number; statusText?: string };
+        errorMessage = `Error HTTP ${httpError.status}: ${httpError.statusText || 'Error del servidor'}`;
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

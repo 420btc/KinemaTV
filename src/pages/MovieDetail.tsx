@@ -525,20 +525,20 @@ const MovieDetail: FC = () => {
                         </motion.div>
                     </motion.div>
                 )}
-            </div>
-            </div>
 
-            {/* Sección de Comentarios */}
-            {movie && (
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <CommentsSection
-                        mediaId={movie.id}
-                        mediaType={isTV ? 'tv' : 'movie'}
-                        title={movie.title}
-                        posterPath={movie.poster_path || undefined}
-                    />
-                </div>
-            )}
+                {/* Sección de Comentarios */}
+                {movie && (
+                    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+                        <CommentsSection
+                            mediaId={movie.id}
+                            mediaType={isTV ? 'tv' : 'movie'}
+                            title={movie.title}
+                            posterPath={movie.poster_path || undefined}
+                        />
+                    </div>
+                )}
+            </div>
+            </div>
 
             {/* 🔘 Botón flotante (solo móvil) */}
             <motion.button

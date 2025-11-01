@@ -33,7 +33,8 @@ export async function getComments(mediaId: number, mediaType: 'movie' | 'tv'): P
     const response = await fetch(`${API_BASE_URL}/api/comments?mediaId=${mediaId}&mediaType=${mediaType}`);
     
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(`Error ${response.status}: ${errorText || response.statusText}`);
     }
     
     const comments = await response.json();
@@ -46,7 +47,7 @@ export async function getComments(mediaId: number, mediaType: 'movie' | 'tv'): P
     }));
   } catch (error) {
     console.error('Error fetching comments:', error);
-    return [];
+    throw error; // Re-throw para que el hook pueda capturar el error
   }
 }
 
@@ -107,13 +108,14 @@ export async function getCommentsCount(mediaId: number, mediaType: 'movie' | 'tv
     const response = await fetch(`${API_BASE_URL}/api/comments?action=count&mediaId=${mediaId}&mediaType=${mediaType}`);
     
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(`Error ${response.status}: ${errorText || response.statusText}`);
     }
     
     const data = await response.json();
     return data.count;
   } catch (error) {
     console.error('Error counting comments:', error);
-    return 0;
+    throw error; // Re-throw para que el hook pueda capturar el error
   }
 }
