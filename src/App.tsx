@@ -47,7 +47,7 @@ function App() {
           {/* Logo */}
           <Link
             to="/"
-            className="text-xl sm:text-2xl font-extrabold tracking-wide flex items-center gap-2 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400 hover:scale-105 transition-transform drop-shadow-lg whitespace-nowrap"
+            className="text-xl sm:text-2xl font-extrabold tracking-wide flex items-center gap-2 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400 hover:scale-105 transition-transform drop-shadow-lg whitespace-nowrap permanent-marker-regular"
           >
             🎬 KinemaTV
           </Link>

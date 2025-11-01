@@ -48,18 +48,18 @@ export function KinemaHero() {
   return (
     <section className="relative">
       {/* Título KINEMA TV */}
-      <div className="text-center py-8 relative z-20">
-        <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold text-kinematv-yellow tracking-wider">
+      <div className="text-center relative z-20">
+        <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold text-kinematv-yellow tracking-wider permanent-marker-regular">
           KINEMA TV
         </h1>
-        <p className="text-lg md:text-xl text-gray-300 mt-4 max-w-2xl mx-auto">
+        <p className="text-lg md:text-xl text-gray-300 mt-1 max-w-2xl mx-auto">
           Descubre las mejores películas y series en un solo lugar
         </p>
       </div>
 
       {/* Tarjetas animadas de películas */}
-      <ContainerScroll className="h-[300vh] relative">
-        <div className="sticky left-0 top-0 h-svh w-full py-12 flex items-center justify-center">
+      <ContainerScroll className="h-[300vh] relative -mt-4">
+        <div className="sticky left-0 top-0 h-svh w-full pt-2 flex items-center justify-center">
           <CardsContainer className="mx-auto h-[500px] w-[380px]">
             {movies.map((movie, index) => (
               <CardTransformed
