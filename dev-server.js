@@ -12,6 +12,7 @@ app.use(express.json());
 
 // Importar la función serverless de comentarios
 let commentsHandler;
+let seriesAnalysisHandler;
 
 async function loadCommentsHandler() {
   try {
@@ -20,6 +21,16 @@ async function loadCommentsHandler() {
     console.log('✅ Comments handler loaded successfully');
   } catch (error) {
     console.error('❌ Error loading comments handler:', error);
+  }
+}
+
+async function loadSeriesAnalysisHandler() {
+  try {
+    const module = await import('./api/series-analysis.js');
+    seriesAnalysisHandler = module.default;
+    console.log('✅ Series analysis handler loaded successfully');
+  } catch (error) {
+    console.error('❌ Error loading series analysis handler:', error);
   }
 }
 
@@ -60,16 +71,37 @@ app.all('/api/comments', async (req, res) => {
   }
 });
 
+// Ruta para análisis de series
+app.all('/api/series-analysis', async (req, res) => {
+  try {
+    if (!seriesAnalysisHandler) {
+      return res.status(500).json({ error: 'Series analysis handler not loaded' });
+    }
+
+    const vercelReq = createVercelRequest(req);
+    const vercelRes = createVercelResponse(res);
+    
+    await seriesAnalysisHandler(vercelReq, vercelRes);
+  } catch (error) {
+    console.error('Error in series analysis API:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Ruta de salud
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', message: 'Dev server running' });
 });
 
 // Inicializar y arrancar servidor
-loadCommentsHandler().then(() => {
+Promise.all([
+  loadCommentsHandler(),
+  loadSeriesAnalysisHandler()
+]).then(() => {
   app.listen(PORT, () => {
     console.log(`🚀 Dev server running on http://localhost:${PORT}`);
     console.log(`📝 Comments API available at http://localhost:${PORT}/api/comments`);
+    console.log(`🎬 Series Analysis API available at http://localhost:${PORT}/api/series-analysis`);
   });
 }).catch(error => {
   console.error('Failed to start server:', error);
