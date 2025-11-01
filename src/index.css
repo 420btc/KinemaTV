@@ -2,6 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Ocultar scrollbar en PC pero mantener funcionalidad */
+@media (min-width: 769px) {
+  /* Para navegadores webkit (Chrome, Safari, Edge) */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Para Firefox */
+  html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  body {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  /* Asegurar que no se reserve espacio para el scrollbar */
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  *::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* Prevenir scroll horizontal SOLO en móvil */
 @media (max-width: 768px) {
   body {
