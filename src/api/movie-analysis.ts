@@ -1,10 +1,15 @@
 // API endpoint para análisis de películas con OpenAI
 // Este archivo maneja las consultas del lado del servidor para mantener la API key segura
 
-import { getMovieAnalysis, getActorDetails, type MovieAnalysis } from './openai';
+import { getMovieAnalysis, getActorDetails, getSeriesAnalysis, type MovieAnalysis, type SeriesAnalysis } from './openai';
 
 export interface MovieAnalysisRequest {
   movieTitle: string;
+  releaseYear: number;
+}
+
+export interface SeriesAnalysisRequest {
+  seriesTitle: string;
   releaseYear: number;
 }
 
@@ -25,6 +30,23 @@ export async function handleMovieAnalysis(request: MovieAnalysisRequest): Promis
     return analysis;
   } catch (error) {
     console.error('Error in handleMovieAnalysis:', error);
+    throw error;
+  }
+}
+
+// Función para manejar análisis completo de series
+export async function handleSeriesAnalysis(request: SeriesAnalysisRequest): Promise<SeriesAnalysis> {
+  try {
+    const { seriesTitle, releaseYear } = request;
+    
+    if (!seriesTitle || !releaseYear) {
+      throw new Error('Título de serie y año de lanzamiento son requeridos');
+    }
+
+    const analysis = await getSeriesAnalysis(seriesTitle, releaseYear);
+    return analysis;
+  } catch (error) {
+    console.error('Error in handleSeriesAnalysis:', error);
     throw error;
   }
 }

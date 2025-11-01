@@ -221,32 +221,34 @@ const MovieDetail: FC = () => {
                     </div>
                 ) : null}
 
-                {/* 🤖 Botón de Análisis Avanzado */}
+                {/* 🔍 Análisis Avanzado */}
                 <div className="mb-8">
-                    <motion.button
-                        onClick={handleGetAnalysis}
-                        disabled={analysisLoading}
-                        className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 
-                            hover:from-purple-700 hover:to-blue-700 disabled:from-gray-600 disabled:to-gray-700
-                            text-white font-semibold rounded-lg shadow-lg transition-all duration-300
-                            flex items-center justify-center gap-3"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                    >
-                        {analysisLoading ? (
-                            <>
-                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                                Analizando...
-                            </>
-                        ) : (
-                            <>
-                                🤖 Análisis Avanzado
-                            </>
-                        )}
-                    </motion.button>
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-semibold text-yellow-400">
+                            Análisis Avanzado
+                        </h3>
+                        <button
+                            onClick={handleGetAnalysis}
+                            disabled={analysisLoading}
+                            className="px-4 py-2 bg-yellow-500 text-black rounded-lg hover:bg-yellow-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                        >
+                            {analysisLoading ? (
+                                <>
+                                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-black border-t-transparent"></div>
+                                    Analizando...
+                                </>
+                            ) : (
+                                <>
+                                    🧠 Obtener Análisis
+                                </>
+                            )}
+                        </button>
+                    </div>
                     
                     {analysisError && (
-                        <p className="text-red-400 text-sm mt-2">{analysisError}</p>
+                        <div className="bg-red-900/50 border border-red-500 rounded-lg p-4 mb-4">
+                            <p className="text-red-300">{analysisError}</p>
+                        </div>
                     )}
                 </div>
 

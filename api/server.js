@@ -138,6 +138,29 @@ app.post('/api/movie-analysis', async (req, res) => {
   }
 });
 
+// Series Analysis route
+app.post('/api/series-analysis', async (req, res) => {
+  try {
+    const { seriesTitle, seriesYear, seriesGenres } = req.body;
+    
+    if (!seriesTitle) {
+      return res.status(400).json({ error: 'Series title is required' });
+    }
+    
+    // Usar año actual si no se proporciona
+    const releaseYear = seriesYear || new Date().getFullYear();
+    
+    const analysis = await movieAnalysisAPI.handleSeriesAnalysis({
+      seriesTitle,
+      releaseYear
+    });
+    res.json(analysis);
+  } catch (error) {
+    console.error('Series analysis error:', error);
+    res.status(500).json({ error: 'Error analyzing series' });
+  }
+});
+
 app.post('/api/actor-details', async (req, res) => {
   try {
     const { actorName } = req.body;
