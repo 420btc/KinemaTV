@@ -130,7 +130,7 @@ export default function TierList() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0A0E1A] text-white p-8">
+    <div className="relative min-h-screen bg-[#0A0E1A] text-white p-4 sm:p-6 lg:p-8">
       <CelestialSphere 
         hue={11}
         speed={0.9}
@@ -140,57 +140,57 @@ export default function TierList() {
       />
       <div className="max-w-full mx-auto relative z-10">
         {/* Header */}
-        <div className="mb-10">
-          <h1 className="text-5xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
+        <div className="mb-6 sm:mb-8 lg:mb-10">
+          <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold mb-3 sm:mb-4 lg:mb-6 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
             🎬 Movie Tier List
           </h1>
-          <p className="text-gray-300 mb-8 text-lg">
+          <p className="text-gray-300 mb-4 sm:mb-6 lg:mb-8 text-sm sm:text-base lg:text-lg">
             Crea tu tier list personalizado de películas. Busca películas y arrástralas a los diferentes niveles según tu gusto.
           </p>
           
           {/* Action Buttons */}
-          <div className="flex gap-6 mb-10">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8 lg:mb-10">
             <button
               onClick={takeSnapshot}
-              className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 px-8 py-4 rounded-lg font-semibold transition text-lg"
+              className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 px-4 py-3 sm:px-6 sm:py-3 lg:px-8 lg:py-4 rounded-lg font-semibold transition text-sm sm:text-base lg:text-lg"
             >
               📸 Capturar Imagen
             </button>
             <button
               onClick={clearTierList}
-              className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 px-8 py-4 rounded-lg font-semibold transition text-lg"
+              className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 px-4 py-3 sm:px-6 sm:py-3 lg:px-8 lg:py-4 rounded-lg font-semibold transition text-sm sm:text-base lg:text-lg"
             >
               🗑️ Limpiar Todo
             </button>
           </div>
         </div>
 
-        <div className="flex flex-col xl:flex-row gap-8">
+        <div className="flex flex-col xl:flex-row gap-4 sm:gap-6 lg:gap-8">
           {/* Tier List - Principal */}
-          <div className="flex-1 order-1">
-            <div ref={tierListRef} className="bg-gray-900 rounded-lg p-8">
-              <h2 className="text-3xl font-bold mb-8 text-center">Mi Tier List de Películas</h2>
+          <div className="flex-1 order-2 xl:order-1">
+            <div ref={tierListRef} className="bg-gray-900 rounded-lg p-3 sm:p-4 lg:p-8">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-6 lg:mb-8 text-center">Mi Tier List de Películas</h2>
               
-              <div className="space-y-6">
+              <div className="space-y-3 sm:space-y-4 lg:space-y-6">
                 {tiers.map((tier) => (
                   <div
                     key={tier.id}
-                    className="flex bg-gray-800 rounded-lg overflow-hidden min-h-[200px]"
+                    className="flex flex-col sm:flex-row bg-gray-800 rounded-lg overflow-hidden"
                     onDragOver={handleDragOver}
                     onDrop={(e) => handleDrop(e, tier.id)}
                   >
                     {/* Tier Label */}
-                    <div className={`${tier.color} w-32 flex items-center justify-center flex-shrink-0`}>
+                    <div className={`${tier.color} w-full sm:w-24 lg:w-32 flex items-center justify-center flex-shrink-0 py-2 sm:py-0`}>
                       <div className="text-center">
-                        <div className="text-4xl font-bold text-white">{tier.id}</div>
-                        <div className="text-sm text-white opacity-90 px-2">{tier.name.split(' - ')[1]}</div>
+                        <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">{tier.id}</div>
+                        <div className="text-xs sm:text-sm text-white opacity-90 px-2">{tier.name.split(' - ')[1]}</div>
                       </div>
                     </div>
 
                     {/* Movies Container */}
-                    <div className="flex-1 p-6 flex flex-wrap gap-4 items-start content-start min-h-[200px] bg-gray-700">
+                    <div className="flex-1 p-3 sm:p-4 lg:p-6 flex flex-wrap gap-2 sm:gap-3 lg:gap-4 items-start content-start min-h-[120px] sm:min-h-[160px] lg:min-h-[200px] bg-gray-700">
                       {tier.movies.length === 0 ? (
-                        <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
+                        <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs sm:text-sm">
                           Arrastra películas aquí
                         </div>
                       ) : (
@@ -202,7 +202,7 @@ export default function TierList() {
                             <img
                               src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
                               alt={movie.title}
-                              className="w-24 h-36 object-cover rounded shadow-lg hover:scale-105 transition-transform"
+                              className="w-16 h-24 sm:w-20 sm:h-30 lg:w-24 lg:h-36 object-cover rounded shadow-lg hover:scale-105 transition-transform"
                               crossOrigin="anonymous"
                               onError={(e) => {
                                 e.currentTarget.src = '/placeholder-movie.png';
@@ -210,7 +210,7 @@ export default function TierList() {
                             />
                             <button
                               onClick={() => removeMovieFromTier(movie.id, tier.id)}
-                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                              className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-red-500 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
                             >
                               ×
                             </button>
@@ -228,11 +228,11 @@ export default function TierList() {
            </div>
 
            {/* Search Panel - Sidebar */}
-           <div className="w-full xl:w-80 order-2">
-             <div className="bg-gray-800 rounded-xl p-6 sticky top-8 border border-gray-700">
-               <h3 className="text-xl font-bold mb-4 text-orange-400">🔍 Buscar Películas</h3>
+           <div className="w-full xl:w-80 order-1 xl:order-2">
+             <div className="bg-gray-800 rounded-xl p-4 sm:p-5 lg:p-6 sticky top-4 sm:top-6 lg:top-8 border border-gray-700">
+               <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-orange-400">🔍 Buscar Películas</h3>
                
-               <div className="flex gap-2 mb-4">
+               <div className="flex gap-2 mb-3 sm:mb-4">
                  <input
                    type="text"
                    value={searchQuery}
@@ -251,7 +251,7 @@ export default function TierList() {
                </div>
 
                {/* Search Results */}
-               <div className="max-h-96 overflow-y-auto space-y-2">
+               <div className="max-h-64 sm:max-h-80 lg:max-h-96 overflow-y-auto space-y-2">
                  {searchResults.length === 0 && searchQuery && !isSearching && (
                    <div className="text-center text-gray-400 py-4">
                      <p className="text-sm">No se encontraron películas</p>
@@ -268,7 +268,7 @@ export default function TierList() {
                        <img
                          src={movie.poster_path ? `https://image.tmdb.org/t/p/w92${movie.poster_path}` : '/placeholder-movie.png'}
                          alt={movie.title}
-                         className="w-12 h-18 object-cover rounded shadow-sm"
+                         className="w-10 h-15 sm:w-12 sm:h-18 object-cover rounded shadow-sm"
                          crossOrigin="anonymous"
                          onError={(e) => {
                            e.currentTarget.src = '/placeholder-movie.png';

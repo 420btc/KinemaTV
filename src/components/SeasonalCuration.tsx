@@ -221,16 +221,10 @@ export function SeasonalCuration({ className = "" }: SeasonalCurationProps) {
 
   return (
     <div className={`space-y-12 ${className}`}>
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent mb-2">
-          {getSeasonIcon()} Curation de {getSeasonName()}
-        </h2>
-        <p className="text-gray-400">
-          Listas curadas especialmente para esta época del año
-        </p>
-      </div>
-
-      {seasonalLists.map((list) => (
+      {/* Solo mostrar Misterios Otoñales sin título principal */}
+      {seasonalLists
+        .filter(list => list.title === "Misterios Otoñales")
+        .map((list) => (
         <div key={list.title} className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
