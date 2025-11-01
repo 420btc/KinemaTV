@@ -23,15 +23,37 @@ export default function Search() {
     const years = Array.from({ length: currentYear - 1899 }, (_, i) => currentYear - i);
 
     useEffect(() => {
-        if (!query.trim()) return;
+        // Si no hay query ni filtros, no hacer nada
+        if (!query.trim() && !selectedYear && !minRating && !maxRating) return;
 
         setLoading(true);
         setError(null);
 
-        searchMovies(query, selectedYear || undefined, minRating || undefined, maxRating || undefined)
-            .then((data) => setMovies(data.results))
-            .catch(() => setError("Error en la búsqueda"))
-            .finally(() => setLoading(false));
+        // Si hay texto de búsqueda, usar searchMovies
+        if (query.trim()) {
+            searchMovies(query, selectedYear || undefined, minRating || undefined, maxRating || undefined)
+                .then((data) => setMovies(data.results))
+                .catch(() => setError("Error en la búsqueda"))
+                .finally(() => setLoading(false));
+        } 
+        // Si no hay texto pero sí filtros, usar discoverMovies
+        else if (selectedYear || minRating || maxRating) {
+            discoverMovies({
+                year: selectedYear || undefined,
+                minVoteAverage: minRating || undefined,
+                sortBy: 'popularity.desc'
+            })
+                .then((data) => {
+                    let results = data.results;
+                    // Aplicar filtro de puntuación máxima si se especifica
+                    if (maxRating !== undefined && maxRating !== null) {
+                        results = results.filter(movie => movie.vote_average <= maxRating);
+                    }
+                    setMovies(results);
+                })
+                .catch(() => setError("Error al obtener películas"))
+                .finally(() => setLoading(false));
+        }
     }, [query, selectedYear, minRating, maxRating]);
 
     const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -142,11 +164,17 @@ export default function Search() {
                 </div>
             </form>
 
-            {query && (
+            {(query || selectedYear || minRating || maxRating) && (
                 <>
                     <h3 className="text-xl font-bold mb-6">
-                        Resultados para:{" "}
-                        <span className="text-yellow-400">{query}</span>
+                        {query ? (
+                            <>
+                                Resultados para:{" "}
+                                <span className="text-yellow-400">{query}</span>
+                            </>
+                        ) : (
+                            <span className="text-yellow-400">Películas filtradas</span>
+                        )}
                         {selectedYear && (
                             <span className="text-gray-400 text-lg ml-2">
                                 (año {selectedYear})
@@ -161,14 +189,15 @@ export default function Search() {
                 </>
             )}
 
-            {/* Estados y Resultados - Solo mostrar si hay una búsqueda activa */}
-            {query && (
+            {/* Estados y Resultados - Mostrar si hay una búsqueda activa o filtros aplicados */}
+            {(query || selectedYear || minRating || maxRating) && (
                 <>
                     {/* Estados */}
                     {loading && <p>Cargando...</p>}
                     {error && <p className="text-red-500">{error}</p>}
                     {!loading && !error && movies.length === 0 && (
-                        <p>No se encontraron resultados para "{query}"
+                        <p>No se encontraron resultados
+                            {query && ` para "${query}"`}
                             {selectedYear && ` en el año ${selectedYear}`}
                             {(minRating || maxRating) && ` con puntuación entre ${minRating || "1.0"} y ${maxRating || "9.9"}`}.
                         </p>
@@ -217,14 +246,14 @@ export default function Search() {
                 </>
             )}
 
-            {/* Mensaje cuando no hay búsqueda activa */}
-            {!query && (
+            {/* Mensaje cuando no hay búsqueda ni filtros activos */}
+            {!query && !selectedYear && !minRating && !maxRating && (
                 <div className="text-center py-12">
                     <p className="text-gray-400 text-lg mb-4">
-                        👆 Escribe el nombre de una película para comenzar la búsqueda
+                        👆 Escribe el nombre de una película o aplica filtros para comenzar la búsqueda
                     </p>
                     <p className="text-gray-500 text-sm">
-                        También puedes usar la barra de búsqueda del menú superior
+                        Puedes buscar por nombre, año, puntuación o cualquier combinación de estos filtros
                     </p>
                 </div>
             )}
