@@ -135,6 +135,7 @@ export function DecadeChallenge() {
     setLoading(true);
     setSelectedDecade(decade);
     setCurrentYear(0);
+    setCompletedMovies(new Set()); // Limpiar películas completadas al cambiar década
     
     try {
       // Obtener películas de un año aleatorio de la década
@@ -165,6 +166,7 @@ export function DecadeChallenge() {
     
     setCurrentYear(nextYearValue);
     setLoading(true);
+    setCompletedMovies(new Set()); // Limpiar películas completadas al cambiar año
     
     try {
       const response = await discoverMovies({
