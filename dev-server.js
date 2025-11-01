@@ -70,9 +70,12 @@ function createVercelRequest(req) {
 function createVercelResponse(res) {
   return {
     status: (code) => ({
-      json: (data) => res.status(code).json(data)
+      json: (data) => res.status(code).json(data),
+      end: () => res.status(code).end()
     }),
-    json: (data) => res.json(data)
+    json: (data) => res.json(data),
+    setHeader: (name, value) => res.setHeader(name, value),
+    end: () => res.end()
   };
 }
 
