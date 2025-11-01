@@ -86,18 +86,39 @@ export default function TierList() {
     if (!tierListRef.current) return;
 
     try {
+      // Esperar a que todas las imágenes se carguen
+      const images = tierListRef.current.querySelectorAll('img');
+      await Promise.all(
+        Array.from(images).map(img => {
+          return new Promise((resolve) => {
+            if (img.complete) {
+              resolve(true);
+            } else {
+              img.onload = () => resolve(true);
+              img.onerror = () => resolve(true);
+            }
+          });
+        })
+      );
+
       const canvas = await html2canvas(tierListRef.current, {
         backgroundColor: '#0A0E1A',
         scale: 2,
         useCORS: true,
+        allowTaint: true,
+        foreignObjectRendering: true,
+        logging: false,
+        width: tierListRef.current.scrollWidth,
+        height: tierListRef.current.scrollHeight,
       });
       
       const link = document.createElement('a');
-      link.download = `tierlist-${Date.now()}.png`;
-      link.href = canvas.toDataURL();
+      link.download = `movie-tierlist-${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png', 1.0);
       link.click();
     } catch (error) {
       console.error("Error taking snapshot:", error);
+      alert("Error al capturar la imagen. Las imágenes externas pueden no aparecer debido a restricciones CORS.");
     }
   };
 
@@ -173,6 +194,7 @@ export default function TierList() {
                       src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
                       alt={movie.title}
                       className="w-12 h-18 object-cover rounded"
+                      crossOrigin="anonymous"
                       onError={(e) => {
                         e.currentTarget.src = '/placeholder-movie.png';
                       }}
@@ -226,6 +248,7 @@ export default function TierList() {
                               src={`https://image.tmdb.org/t/p/w154${movie.poster_path}`}
                               alt={movie.title}
                               className="w-16 h-24 object-cover rounded shadow-lg hover:scale-105 transition-transform"
+                              crossOrigin="anonymous"
                               onError={(e) => {
                                 e.currentTarget.src = '/placeholder-movie.png';
                               }}
