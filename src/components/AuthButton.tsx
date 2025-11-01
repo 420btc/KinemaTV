@@ -45,9 +45,9 @@ export function AuthButton() {
   return (
     <button
       onClick={() => window.location.href = '/auth/signin'}
-      className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+      className="flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 hover:border-white/30 text-white rounded-full transition-all duration-300 shadow-lg hover:shadow-xl text-sm font-medium"
     >
-      <LogIn size={16} />
+      <LogIn size={14} />
       <span>Iniciar Sesión</span>
     </button>
   );

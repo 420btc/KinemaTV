@@ -40,7 +40,7 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col bg-[#0A0E1A] text-slate-100 font-sans">
       {/* ✅ Navbar */}
-      <nav className="sticky top-0 z-50 bg-gradient-to-r from-[#0A0E1A]/95 via-[#101624]/95 to-[#0A0E1A]/95 backdrop-blur-md border-b border-[#1E2533] shadow-lg">
+      <nav className="sticky top-0 z-50 bg-white/5 backdrop-blur-xl border-b border-white/10 shadow-2xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center h-16">
           {/* Logo */}
           <Link
@@ -62,7 +62,7 @@ function App() {
             {/* Search */}
             <form
               onSubmit={handleSearch}
-              className="flex items-center bg-[#1A2233] rounded-lg overflow-hidden shadow-inner"
+              className="flex items-center bg-white/10 backdrop-blur-md rounded-lg overflow-hidden shadow-inner border border-white/20"
             >
               <input
                 type="text"
@@ -103,7 +103,7 @@ function App() {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="sm:hidden bg-[#0D121F] border-t border-[#1E2533] flex flex-col items-center py-6 gap-6 animate-slideDown">
+          <div className="sm:hidden bg-white/5 backdrop-blur-xl border-t border-white/10 flex flex-col items-center py-6 gap-6 animate-slideDown">
             <Link to="/" className="hover:text-orange-400 transition" onClick={() => setIsOpen(false)}>Inicio</Link>
             <Link to="/explore" className="hover:text-orange-400 transition" onClick={() => setIsOpen(false)}>Explorar</Link>
             <Link to="/search" className="hover:text-orange-400 transition" onClick={() => setIsOpen(false)}>Buscar</Link>
@@ -112,7 +112,7 @@ function App() {
             {/* Buscador mobile */}
             <form
               onSubmit={handleSearch}
-              className="flex items-center bg-[#1A2233] rounded-lg overflow-hidden shadow-inner w-11/12 max-w-sm"
+              className="flex items-center bg-white/10 backdrop-blur-md rounded-lg overflow-hidden shadow-inner border border-white/20 w-11/12 max-w-sm"
             >
               <input
                 type="text"

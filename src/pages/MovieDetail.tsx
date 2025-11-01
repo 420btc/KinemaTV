@@ -116,8 +116,8 @@ const MovieDetail: FC = () => {
         <div className="relative min-h-screen">
             {/* Shader de fondo */}
             <CelestialSphere
-                hue={35}
-                speed={0.2}
+                hue={11}
+                speed={0.9}
                 zoom={1.8}
                 particleSize={2.5}
                 className="fixed top-0 left-0 w-full h-full z-0"
