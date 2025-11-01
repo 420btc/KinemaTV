@@ -43,17 +43,17 @@ function App() {
     <div className="min-h-screen flex flex-col bg-[#0A0E1A] text-slate-100 font-sans">
       {/* ✅ Navbar */}
       <nav className="sticky top-0 z-50 bg-white/5 backdrop-blur-xl border-b border-white/10 shadow-2xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center h-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
           {/* Logo */}
           <Link
             to="/"
-            className="text-xl sm:text-2xl font-extrabold tracking-wide flex items-center gap-2 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400 hover:scale-105 transition-transform drop-shadow-lg whitespace-nowrap mr-12"
+            className="text-xl sm:text-2xl font-extrabold tracking-wide flex items-center gap-2 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400 hover:scale-105 transition-transform drop-shadow-lg whitespace-nowrap"
           >
             🎬 KinemaTV
           </Link>
 
           {/* Desktop menu */}
-          <div className="hidden sm:flex items-center gap-6 flex-1">
+          <div className="hidden sm:flex items-center gap-6 flex-1 ml-12">
             <Link to="/" className="hover:text-orange-400 transition">Inicio</Link>
             <Link to="/explore" className="hover:text-orange-400 transition">Explorar</Link>
             <Link to="/search" className="hover:text-orange-400 transition">Buscar</Link>

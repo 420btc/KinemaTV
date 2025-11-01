@@ -230,25 +230,25 @@ export function SeasonChallenge() {
       />
       
       {/* Contenido principal */}
-      <div className="relative z-10 p-6">
+      <div className="relative z-10 p-3 sm:p-6">
         <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-yellow-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent mb-4">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-yellow-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent mb-4">
             🎯 Season Challenge
           </h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto px-4">
             Desafíos cinematográficos que cambian con las estaciones. ¡Completa tu lista y desbloquea logros!
           </p>
         </div>
 
         {/* Selector de estación */}
-        <div className="flex justify-center mb-8">
-          <div className="flex space-x-2 bg-white/10 rounded-full p-2">
+        <div className="flex justify-center mb-6 sm:mb-8">
+          <div className="flex flex-wrap justify-center gap-1 sm:gap-2 bg-white/10 rounded-full p-1 sm:p-2 max-w-full">
             {Object.keys(seasonChallenges).map((season) => (
               <button
                 key={season}
                 onClick={() => setCurrentSeason(season)}
-                className={`px-6 py-3 rounded-full transition-all duration-300 ${
+                className={`px-3 py-2 sm:px-6 sm:py-3 rounded-full transition-all duration-300 text-sm sm:text-base whitespace-nowrap ${
                   currentSeason === season
                     ? 'bg-white/20 text-white'
                     : 'text-gray-400 hover:text-white hover:bg-white/10'
@@ -262,11 +262,11 @@ export function SeasonChallenge() {
 
         {!selectedChallenge ? (
           <div>
-            <h2 className="text-3xl font-bold text-center mb-8 text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 text-white px-4">
               Desafíos de {getSeasonName(currentSeason)} {getSeasonIcon(currentSeason)}
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 px-2 sm:px-0">
               {seasonChallenges[currentSeason].map((challenge) => (
                 <div
                   key={challenge.id}
@@ -275,12 +275,12 @@ export function SeasonChallenge() {
                             border border-white/10 cursor-pointer transform transition-all duration-300 
                             hover:scale-105 hover:shadow-2xl group`}
                 >
-                  <div className="p-8">
-                    <div className="text-6xl mb-4 text-center">{challenge.icon}</div>
-                    <h3 className={`text-2xl font-bold ${challenge.theme.accent} mb-3 text-center`}>
+                  <div className="p-4 sm:p-8">
+                    <div className="text-4xl sm:text-6xl mb-2 sm:mb-4 text-center">{challenge.icon}</div>
+                    <h3 className={`text-lg sm:text-2xl font-bold ${challenge.theme.accent} mb-2 sm:mb-3 text-center`}>
                       {challenge.title}
                     </h3>
-                    <p className={`text-lg ${challenge.theme.text} text-center`}>
+                    <p className={`text-sm sm:text-lg ${challenge.theme.text} text-center`}>
                       {challenge.description}
                     </p>
                   </div>
@@ -291,7 +291,7 @@ export function SeasonChallenge() {
           </div>
         ) : (
           <div>
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex flex-col sm:flex-row items-center justify-between mb-6 sm:mb-8 gap-4 px-2 sm:px-0">
               <button
                 onClick={() => setSelectedChallenge(null)}
                 className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
@@ -303,19 +303,19 @@ export function SeasonChallenge() {
               </button>
               
               <div className="text-center">
-                <h2 className={`text-3xl font-bold ${selectedChallenge.theme.accent} mb-2`}>
+                <h2 className={`text-xl sm:text-3xl font-bold ${selectedChallenge.theme.accent} mb-2`}>
                   {selectedChallenge.icon} {selectedChallenge.title}
                 </h2>
-                <p className={`${selectedChallenge.theme.text}`}>
+                <p className={`text-sm sm:text-base ${selectedChallenge.theme.text}`}>
                   {selectedChallenge.description}
                 </p>
               </div>
 
-              <div className="text-right">
-                <div className={`text-2xl font-bold ${selectedChallenge.theme.accent}`}>
+              <div className="text-center sm:text-right">
+                <div className={`text-xl sm:text-2xl font-bold ${selectedChallenge.theme.accent}`}>
                   {completedMovies.size}/{movies.length}
                 </div>
-                <div className="w-32 bg-gray-700 rounded-full h-2 mt-2">
+                <div className="w-24 sm:w-32 bg-gray-700 rounded-full h-2 mt-2">
                   <div 
                     className={`h-2 rounded-full bg-gradient-to-r ${selectedChallenge.theme.bg.replace('/20', '')}`}
                     style={{ width: `${progress}%` }}
