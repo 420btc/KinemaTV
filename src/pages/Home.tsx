@@ -194,7 +194,7 @@ export default function Home() {
                 speed={0.9}
                 zoom={1.8}
                 particleSize={2.5}
-                className="fixed top-0 left-0 w-full h-full z-0"
+                className="celestial-sphere-container fixed top-0 left-0 w-full h-full z-0"
             />
             
             {/* Hero Section */}

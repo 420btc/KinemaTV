@@ -155,8 +155,19 @@ export const CelestialSphere: React.FC<CelestialSphereProps> = ({
     // --- Event Handlers ---
     const resize = () => {
       const { clientWidth, clientHeight } = currentMount;
-      renderer.setSize(clientWidth, clientHeight);
-      material.uniforms.u_resolution.value.set(clientWidth, clientHeight);
+      
+      // En móvil, usar altura extendida para cubrir toda la pantalla
+      const isMobile = window.innerWidth <= 768;
+      let width = isMobile ? window.innerWidth : clientWidth;
+      const height = isMobile ? window.innerHeight * 1.5 : clientHeight; // 150% de altura en móvil
+      
+      // Mantener proporciones pero extender cobertura
+      if (isMobile) {
+        width = Math.max(width, window.screen.width);
+      }
+      
+      renderer.setSize(width, height);
+      material.uniforms.u_resolution.value.set(width, height);
       camera.updateProjectionMatrix();
     };
 
