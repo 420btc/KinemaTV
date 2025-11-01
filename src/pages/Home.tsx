@@ -93,6 +93,10 @@ export default function Home() {
                 <div
                     ref={refEl}
                     className="flex gap-4 overflow-x-auto pb-4 scroll-smooth custom-scroll"
+                    style={{
+                        maskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
+                        WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)'
+                    }}
                 >
                     {movies.map((movie) => (
                         <div
