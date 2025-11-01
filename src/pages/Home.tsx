@@ -184,7 +184,7 @@ export default function Home() {
         <div className="relative min-h-screen">
             {/* Shader de fondo */}
             <CelestialSphere
-                hue={240}
+                hue={11}
                 speed={0.2}
                 zoom={1.8}
                 particleSize={2.5}
