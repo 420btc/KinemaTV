@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // Importaciones dinámicas para las funciones de API
-let userAPI, favoritesAPI, watchlistAPI, movieAnalysisAPI, chatAPI;
+let userAPI, favoritesAPI, watchlistAPI, movieAnalysisAPI, chatAPI, commentsAPI;
 
 async function initializeAPIs() {
   try {
@@ -20,12 +20,14 @@ async function initializeAPIs() {
     const watchlistModule = await import('../src/api/watchlist.ts');
     const movieAnalysisModule = await import('../src/api/movie-analysis.ts');
     const chatModule = await import('../src/api/chat.ts');
+    const commentsModule = await import('../src/api/comments-backend.ts');
     
     userAPI = userModule;
     favoritesAPI = favoritesModule;
     watchlistAPI = watchlistModule;
     movieAnalysisAPI = movieAnalysisModule;
     chatAPI = chatModule;
+    commentsAPI = commentsModule;
   } catch (error) {
     console.error('Error loading API modules:', error);
   }
@@ -212,6 +214,51 @@ app.post('/api/recommendations', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Comments routes
+app.get('/api/comments/:mediaId/:mediaType', async (req, res) => {
+  try {
+    const { mediaId, mediaType } = req.params;
+    const comments = await commentsAPI.getComments(parseInt(mediaId), mediaType);
+    res.json(comments);
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/comments', async (req, res) => {
+  try {
+    const comment = await commentsAPI.createComment(req.body);
+    res.json(comment);
+  } catch (error) {
+    console.error('Error creating comment:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/comments/:mediaId/:mediaType/count', async (req, res) => {
+  try {
+    const { mediaId, mediaType } = req.params;
+    const count = await commentsAPI.getCommentsCount(parseInt(mediaId), mediaType);
+    res.json({ count });
+  } catch (error) {
+    console.error('Error fetching comments count:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/comments/recent/:limit?', async (req, res) => {
+  try {
+    const limit = req.params.limit ? parseInt(req.params.limit) : 10;
+    const comments = await commentsAPI.getRecentComments(limit);
+    res.json(comments);
+  } catch (error) {
+    console.error('Error fetching recent comments:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 // Inicializar APIs y luego iniciar el servidor
 initializeAPIs().then(() => {
