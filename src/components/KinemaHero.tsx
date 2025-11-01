@@ -5,7 +5,7 @@ import {
   ContainerScroll,
   ReviewStars,
 } from "./ui/animated-cards-stack";
-import { getTrendingMovies, getPopularMovies } from "../services/tmdb";
+import { getTopRatedMovies } from "../services/tmdb";
 import type { Movie } from "../services/tmdb";
 import { FavoriteButton } from "./FavoriteButton";
 import { WatchlistButton } from "./WatchlistButton";
@@ -16,21 +16,14 @@ export function KinemaHero() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Obtener películas populares y en tendencia para el hero
-    Promise.all([
-      getTrendingMovies('week'),
-      getPopularMovies()
-    ])
-      .then(([trending, popular]) => {
-        // Mezclar y tomar las primeras 6 películas
-        const allMovies = [...trending.results, ...popular.results];
-        const uniqueMovies = allMovies.filter((movie, index, self) => 
-          index === self.findIndex(m => m.id === movie.id)
-        );
-        setMovies(uniqueMovies.slice(0, 6));
+    // Obtener las 6 películas mejor valoradas para el hero
+    getTopRatedMovies()
+      .then((response) => {
+        // Tomar exactamente las primeras 6 películas mejor valoradas
+        setMovies(response.results.slice(0, 6));
       })
       .catch(error => {
-        console.error("Error loading hero movies:", error);
+        console.error("Error loading top rated movies:", error);
         // Fallback con datos mock si falla la API
         setMovies([]);
       })
