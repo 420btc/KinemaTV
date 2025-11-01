@@ -7,6 +7,14 @@ export default defineConfig({
   define: {
     'process.env': process.env,
   },
+  build: {
+    rollupOptions: {
+      external: ['@prisma/client'],
+    },
+  },
+  optimizeDeps: {
+    exclude: ['@prisma/client'],
+  },
   server: {
     proxy: {
       '/api': {

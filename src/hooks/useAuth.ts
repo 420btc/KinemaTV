@@ -1,18 +1,8 @@
 import { useUser } from '@stackframe/stack';
 import { useState, useEffect } from 'react';
-import { createOrUpdateUser } from '../api/user';
+import { createOrUpdateUserAPI, type UserData } from '../services/userService';
 import type { StackUserExtended } from '../types/stack-user';
 import { getEmailFromUser, getNameFromUser, getAvatarFromUser } from '../types/stack-user';
-
-export interface UserData {
-  id: string;
-  email: string;
-  name: string | null;
-  avatar: string | null;
-  username?: string | null;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
 
 export function useAuth() {
   const stackAuth = useUser();
@@ -28,7 +18,7 @@ export function useAuth() {
         const name = getNameFromUser(stackUser);
         const avatar = getAvatarFromUser(stackUser);
 
-        const userData = await createOrUpdateUser({
+        const userData = await createOrUpdateUserAPI({
           id: stackUser.id,
           email: email || 'No email',
           name: name || null,

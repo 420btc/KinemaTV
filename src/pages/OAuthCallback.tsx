@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@stackframe/stack';
-import { createOrUpdateUser } from '../api/user';
+import { createOrUpdateUserAPI } from '../services/userService';
 import type { StackUserExtended } from '../types/stack-user';
 import { getEmailFromUser, getNameFromUser, getAvatarFromUser } from '../types/stack-user';
 
@@ -44,7 +44,7 @@ const OAuthCallback: React.FC = () => {
             const avatar = getAvatarFromUser(stackUser);
             
             // Sincronizar usuario con la base de datos local
-            await createOrUpdateUser({
+            await createOrUpdateUserAPI({
               id: user.id,
               email,
               name,
@@ -93,7 +93,7 @@ const OAuthCallback: React.FC = () => {
       const avatar = getAvatarFromUser(stackUser);
       
       // Sincronizar con la base de datos
-      createOrUpdateUser({
+      createOrUpdateUserAPI({
         id: user.id,
         email,
         name,
