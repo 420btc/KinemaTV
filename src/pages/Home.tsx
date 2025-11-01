@@ -101,7 +101,7 @@ export default function Home() {
                     {movies.map((movie) => (
                         <div
                             key={movie.id}
-                            className="min-w-[160px] sm:min-w-[180px] md:min-w-[200px] bg-[#101523] rounded-lg overflow-hidden shadow-md hover:shadow-glow hover:scale-105 transition-transform duration-300 flex-shrink-0 relative group"
+                            className="min-w-[160px] sm:min-w-[180px] md:min-w-[200px] bg-[#101523] rounded-lg overflow-hidden shadow-md hover:scale-105 transition-transform duration-300 flex-shrink-0 relative group"
                             style={{ height: "310px" }}
                         >
                             <Link to={isTV ? `/tv/${movie.id}` : `/movie/${movie.id}`} className="block">
@@ -136,15 +136,15 @@ export default function Home() {
                     ))}
                 </div>
 
-                {/* 🔘 Flechas visibles solo en desktop */}
+                {/* Botones de navegación glass */}
                 <button
                     onClick={() => scroll(refEl, "left")}
-                    className="hidden sm:flex absolute left-0 top-0 bottom-0 w-10 md:w-12 items-center justify-center bg-gradient-to-r from-[#0a0e1a]/80 to-transparent text-kinematv-yellow opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 hover:border-kinematv-yellow/50 text-kinematv-yellow opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl z-10"
                     aria-label="Deslizar a la izquierda"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6"
+                        className="h-5 w-5"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -160,12 +160,12 @@ export default function Home() {
 
                 <button
                     onClick={() => scroll(refEl, "right")}
-                    className="hidden sm:flex absolute right-0 top-0 bottom-0 w-10 md:w-12 items-center justify-center bg-gradient-to-l from-[#0a0e1a]/80 to-transparent text-kinematv-yellow opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 hover:border-kinematv-yellow/50 text-kinematv-yellow opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl z-10"
                     aria-label="Deslizar a la derecha"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6"
+                        className="h-5 w-5"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
