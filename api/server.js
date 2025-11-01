@@ -15,10 +15,10 @@ let userAPI, favoritesAPI, watchlistAPI, movieAnalysisAPI;
 
 async function initializeAPIs() {
   try {
-    const userModule = await import('./src/api/user.ts');
-    const favoritesModule = await import('./src/api/favorites.ts');
-    const watchlistModule = await import('./src/api/watchlist.ts');
-    const movieAnalysisModule = await import('./src/api/movie-analysis.ts');
+    const userModule = await import('../src/api/user.ts');
+    const favoritesModule = await import('../src/api/favorites.ts');
+    const watchlistModule = await import('../src/api/watchlist.ts');
+    const movieAnalysisModule = await import('../src/api/movie-analysis.ts');
     
     userAPI = userModule;
     favoritesAPI = favoritesModule;
