@@ -53,7 +53,7 @@ export function KinemaHero() {
       {/* Tarjetas animadas de películas */}
       <ContainerScroll className="h-[200vh] sm:h-[250vh] lg:h-[300vh] relative -mt-4">
         <div className="sticky left-0 top-0 h-svh w-full pt-8 sm:pt-4 lg:pt-2 flex items-center lg:items-center justify-center px-4 lg:pt-16">
-          <CardsContainer className="mx-auto h-[400px] sm:h-[450px] md:h-[500px] lg:h-[600px] xl:h-[650px] w-[280px] sm:w-[320px] md:w-[380px] lg:w-[450px] xl:w-[500px]">
+          <CardsContainer className="mx-auto h-[400px] sm:h-[450px] md:h-[500px] lg:h-[600px] xl:h-[650px] w-[240px] sm:w-[320px] md:w-[380px] lg:w-[450px] xl:w-[500px]">
             {movies.map((movie, index) => (
               <CardTransformed
                 key={movie.id}
@@ -71,11 +71,11 @@ export function KinemaHero() {
                     <img
                       src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                       alt={movie.title || movie.name}
-                      className="w-full h-[280px] sm:h-[320px] md:h-[380px] lg:h-[450px] xl:h-[500px] object-cover rounded-t-xl"
+                      className="w-full h-[260px] sm:h-[320px] md:h-[380px] lg:h-[450px] xl:h-[500px] object-cover rounded-t-xl"
                       loading="lazy"
                     />
                   ) : (
-                    <div className="h-[280px] sm:h-[320px] md:h-[380px] lg:h-[450px] xl:h-[500px] w-full flex items-center justify-center text-gray-500 bg-[#1E2533] rounded-t-xl">
+                    <div className="h-[260px] sm:h-[320px] md:h-[380px] lg:h-[450px] xl:h-[500px] w-full flex items-center justify-center text-gray-500 bg-[#1E2533] rounded-t-xl">
                       Sin imagen
                     </div>
                   )}

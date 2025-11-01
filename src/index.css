@@ -50,6 +50,7 @@
     z-index: 0 !important;
     position: fixed !important;
     overflow: hidden !important;
+    filter: blur(5px) !important;
   }
   
   /* El canvas se extiende para cubrir toda la altura */
