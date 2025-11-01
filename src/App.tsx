@@ -45,7 +45,7 @@ function App() {
             to="/"
             className="text-xl sm:text-2xl font-extrabold tracking-wide flex items-center gap-2 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400 hover:scale-105 transition-transform drop-shadow-lg"
           >
-            🎬 YourTMDB
+            🎬 YouTMDB
           </Link>
 
           {/* Desktop menu */}
