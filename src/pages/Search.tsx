@@ -100,7 +100,7 @@ export default function Search() {
 
             {query && (
                 <>
-                    <h3 className="text-xl font-bold mb-4">
+                    <h3 className="text-xl font-bold mb-6">
                         Resultados para:{" "}
                         <span className="text-yellow-400">{query}</span>
                         {selectedYear && (
@@ -109,26 +109,6 @@ export default function Search() {
                             </span>
                         )}
                     </h3>
-
-                    {/* Filtro por año */}
-                    <div className="mb-6">
-                        <label htmlFor="year-filter" className="block text-sm font-medium text-gray-300 mb-2">
-                            Filtrar por año:
-                        </label>
-                        <select
-                            id="year-filter"
-                            value={selectedYear || ""}
-                            onChange={handleYearChange}
-                            className="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5"
-                        >
-                            <option value="">Todos los años</option>
-                            {years.map((year) => (
-                                <option key={year} value={year}>
-                                    {year}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
                 </>
             )}
 
