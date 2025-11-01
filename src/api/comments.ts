@@ -23,7 +23,7 @@ export interface Comment {
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || (
   import.meta.env.PROD 
-    ? 'https://tu-app.vercel.app' 
+    ? '' // En Vercel, usa la misma URL base (relativa)
     : 'http://localhost:3001'
 );
 
