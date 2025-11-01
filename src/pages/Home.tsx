@@ -10,6 +10,7 @@ import {
 } from "../services/tmdb";
 import { FavoriteButton } from "../components/FavoriteButton";
 import { WatchlistButton } from "../components/WatchlistButton";
+import { CelestialSphere } from "../components/ui/celestial-sphere";
 import type { Movie } from "../services/tmdb";
 
 // Tipo de ref (permite null sin romper TypeScript)
@@ -180,44 +181,56 @@ export default function Home() {
 
     // --- Página ---
     return (
-        <div className="px-2 sm:px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
-            <Section
-                title="🔥 Tendencia esta semana"
-                movies={trendingMovies}
-                refEl={trendingMoviesRef}
+        <div className="relative min-h-screen">
+            {/* Shader de fondo */}
+            <CelestialSphere
+                hue={240}
+                speed={0.2}
+                zoom={1.8}
+                particleSize={2.5}
+                className="fixed top-0 left-0 w-full h-full z-0"
             />
-            <Section
-                title="⚡ Tendencia hoy"
-                movies={trendingMoviesToday}
-                refEl={trendingMoviesTodayRef}
-            />
-            <Section 
-                title="🎬 En cines ahora" 
-                movies={nowPlaying} 
-                refEl={nowPlayingRef} 
-            />
-            <Section 
-                title="⭐ Mejor valoradas" 
-                movies={topRated} 
-                refEl={topRatedRef} 
-            />
-            <Section 
-                title="🆕 Estrenos recientes 2024" 
-                movies={recentMovies} 
-                refEl={recentMoviesRef} 
-            />
-            <Section
-                title="📺 Series en tendencia"
-                movies={trendingTV}
-                refEl={trendingTVRef}
-                isTV={true}
-            />
-            <Section
-                title="⭐ Series mejor valoradas"
-                movies={topRatedTV}
-                refEl={topRatedTVRef}
-                isTV={true}
-            />
+            
+            {/* Contenido principal */}
+            <div className="relative z-10 px-2 sm:px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+                <Section
+                    title="🔥 Tendencia esta semana"
+                    movies={trendingMovies}
+                    refEl={trendingMoviesRef}
+                />
+                <Section
+                    title="⚡ Tendencia hoy"
+                    movies={trendingMoviesToday}
+                    refEl={trendingMoviesTodayRef}
+                />
+                <Section 
+                    title="🎬 En cines ahora" 
+                    movies={nowPlaying} 
+                    refEl={nowPlayingRef} 
+                />
+                <Section 
+                    title="⭐ Mejor valoradas" 
+                    movies={topRated} 
+                    refEl={topRatedRef} 
+                />
+                <Section 
+                    title="🆕 Estrenos recientes 2024" 
+                    movies={recentMovies} 
+                    refEl={recentMoviesRef} 
+                />
+                <Section
+                    title="📺 Series en tendencia"
+                    movies={trendingTV}
+                    refEl={trendingTVRef}
+                    isTV={true}
+                />
+                <Section
+                    title="⭐ Series mejor valoradas"
+                    movies={topRatedTV}
+                    refEl={topRatedTVRef}
+                    isTV={true}
+                />
+            </div>
         </div>
     );
 }
