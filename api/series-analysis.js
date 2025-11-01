@@ -1,18 +1,23 @@
-import dotenv from 'dotenv';
-
-dotenv.config();
+import { getSeriesAnalysis } from './_openai-utils.js';
 
 // Función serverless para análisis de series
 export default async function handler(req, res) {
+  // Configurar CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // Manejar preflight OPTIONS
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   // Solo permitir POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    // Importación dinámica del módulo de análisis
-    const movieAnalysisModule = await import('../src/api/movie-analysis.js');
-    
     const { seriesTitle, seriesYear, seriesGenres } = req.body;
     
     if (!seriesTitle) {
@@ -22,10 +27,9 @@ export default async function handler(req, res) {
     // Usar año actual si no se proporciona
     const releaseYear = seriesYear || new Date().getFullYear();
     
-    const analysis = await movieAnalysisModule.handleSeriesAnalysis({
-      seriesTitle,
-      releaseYear
-    });
+    console.log(`Analizando serie: ${seriesTitle} (${releaseYear})`);
+    
+    const analysis = await getSeriesAnalysis(seriesTitle, releaseYear);
     
     res.status(200).json(analysis);
   } catch (error) {

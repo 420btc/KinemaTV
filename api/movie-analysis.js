@@ -1,14 +1,23 @@
+import { getMovieAnalysis } from './_openai-utils.js';
+
+// Función serverless para análisis de películas
 export default async function handler(req, res) {
-  // Solo permitir métodos POST
+  // Configurar CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // Manejar preflight OPTIONS
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  // Solo permitir POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    // Importar dinámicamente el módulo de análisis de películas
-    const movieAnalysisModule = await import('../src/api/movie-analysis.js');
-    
-    // Extraer datos del cuerpo de la petición
     const { movieTitle, movieYear, movieGenres } = req.body;
     
     if (!movieTitle) {
@@ -18,13 +27,10 @@ export default async function handler(req, res) {
     // Usar año actual si no se proporciona
     const releaseYear = movieYear || new Date().getFullYear();
     
-    // Realizar el análisis usando la función del módulo
-    const analysis = await movieAnalysisModule.handleMovieAnalysis({
-      movieTitle,
-      releaseYear
-    });
+    console.log(`Analizando película: ${movieTitle} (${releaseYear})`);
     
-    // Devolver el análisis
+    const analysis = await getMovieAnalysis(movieTitle, releaseYear);
+    
     res.status(200).json(analysis);
   } catch (error) {
     console.error('Movie analysis error:', error);
