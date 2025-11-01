@@ -72,7 +72,7 @@ export default function Explore() {
                     ? data.results.filter((m) => m.genre_ids?.includes(activeGenre))
                     : data.results;
 
-                const normalized = filtered.map((item: any) => ({
+                const normalized = filtered.map((item: Movie) => ({
                     ...item,
                     title: item.title || item.name,
                 }));

@@ -2,14 +2,16 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { getMovieDetails } from "../services/tmdb";
+import { FavoriteButton } from "../components/FavoriteButton";
+import { WatchlistButton } from "../components/WatchlistButton";
 import type { FC } from "react";
 
 interface MovieDetails {
     id: number;
     title: string;
     overview: string;
-    poster_path: string | null;
-    release_date: string;
+    poster_path?: string | null;
+    release_date?: string;
     vote_average: number;
     genres: { id: number; name: string }[];
     credits?: {
@@ -78,11 +80,19 @@ const MovieDetail: FC = () => {
 
                 {/* 🔹 Línea de metadatos + botón volver */}
                 <div className="flex justify-between items-center mb-3 flex-wrap gap-3">
-                    <p className="text-gray-400">
-                        ⭐ {movie.vote_average.toFixed(1)} | {movie.release_date}
-                    </p>
+                    <div className="flex items-center gap-4">
+                        <p className="text-gray-400">
+                            ⭐ {movie.vote_average.toFixed(1)} | {movie.release_date}
+                        </p>
+                        
+                        {/* Botones de favoritos y watchlist */}
+                        <div className="flex gap-2">
+                            <FavoriteButton movie={movie} />
+                            <WatchlistButton movie={movie} />
+                        </div>
+                    </div>
 
-                    {/* 🔙 Botón “Volver” (alineado al texto, flecha izquierda) */}
+                    {/* 🔙 Botón "Volver" (alineado al texto, flecha izquierda) */}
                     <motion.button
                         onClick={handleBack}
                         initial={{ opacity: 0, x: 20 }}

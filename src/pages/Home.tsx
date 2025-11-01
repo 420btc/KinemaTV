@@ -5,6 +5,8 @@ import {
     getTopRatedMovies,
     getPopularMovies,
 } from "../services/tmdb";
+import { FavoriteButton } from "../components/FavoriteButton";
+import { WatchlistButton } from "../components/WatchlistButton";
 import type { Movie } from "../services/tmdb";
 
 // Tipo de ref (permite null sin romper TypeScript)
@@ -67,33 +69,40 @@ export default function Home() {
                     className="flex gap-4 overflow-x-auto pb-4 scroll-smooth custom-scroll"
                 >
                     {movies.map((movie) => (
-                        <Link
-                            to={`/movie/${movie.id}`}
+                        <div
                             key={movie.id}
-                            className="min-w-[160px] sm:min-w-[180px] md:min-w-[200px] bg-[#101523] rounded-lg overflow-hidden shadow-md hover:shadow-glow hover:scale-105 transition-transform duration-300 flex-shrink-0"
+                            className="min-w-[160px] sm:min-w-[180px] md:min-w-[200px] bg-[#101523] rounded-lg overflow-hidden shadow-md hover:shadow-glow hover:scale-105 transition-transform duration-300 flex-shrink-0 relative group"
                             style={{ height: "310px" }}
                         >
-                            {movie.poster_path ? (
-                                <img
-                                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                                    alt={movie.title}
-                                    className="w-full h-[250px] object-cover"
-                                    loading="lazy"
-                                />
-                            ) : (
-                                <div className="h-[250px] flex items-center justify-center text-gray-500 bg-[#1E2533]">
-                                    Sin imagen
+                            <Link to={`/movie/${movie.id}`} className="block">
+                                {movie.poster_path ? (
+                                    <img
+                                        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                                        alt={movie.title}
+                                        className="w-full h-[250px] object-cover"
+                                        loading="lazy"
+                                    />
+                                ) : (
+                                    <div className="h-[250px] flex items-center justify-center text-gray-500 bg-[#1E2533]">
+                                        Sin imagen
+                                    </div>
+                                )}
+                                <div className="p-2">
+                                    <h3 className="text-sm font-semibold truncate w-full">
+                                        {movie.title}
+                                    </h3>
+                                    <p className="text-scenra-yellow text-xs mt-1">
+                                        ⭐ {movie.vote_average.toFixed(1)}
+                                    </p>
                                 </div>
-                            )}
-                            <div className="p-2">
-                                <h3 className="text-sm font-semibold truncate w-full">
-                                    {movie.title}
-                                </h3>
-                                <p className="text-scenra-yellow text-xs mt-1">
-                                    ⭐ {movie.vote_average.toFixed(1)}
-                                </p>
+                            </Link>
+                            
+                            {/* Botones de favoritos y watchlist */}
+                            <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                <FavoriteButton movie={movie} />
+                                <WatchlistButton movie={movie} />
                             </div>
-                        </Link>
+                        </div>
                     ))}
                 </div>
 

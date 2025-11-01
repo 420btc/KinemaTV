@@ -4,6 +4,11 @@ import Search from "./pages/Search";
 import Explore from "./pages/Explore";
 import MovieDetail from "./pages/MovieDetail";
 import TVDetail from "./pages/TVDetail";
+import Favorites from "./pages/Favorites";
+import Watchlist from "./pages/Watchlist";
+import SignIn from "./pages/SignIn";
+import SignOut from "./pages/SignOut";
+import { AuthButton } from "./components/AuthButton";
 import { useState, useEffect } from "react";
 import type { FormEvent } from "react";
 import { Toaster } from "react-hot-toast";
@@ -47,6 +52,8 @@ function App() {
             <Link to="/" className="hover:text-orange-400 transition">Inicio</Link>
             <Link to="/explore" className="hover:text-orange-400 transition">Explorar</Link>
             <Link to="/search" className="hover:text-orange-400 transition">Buscar</Link>
+            <Link to="/favorites" className="hover:text-orange-400 transition">Favoritos</Link>
+            <Link to="/watchlist" className="hover:text-orange-400 transition">Watchlist</Link>
 
             {/* Search */}
             <form
@@ -67,6 +74,9 @@ function App() {
                 🔍
               </button>
             </form>
+
+            {/* Auth Button */}
+            <AuthButton />
           </div>
 
           {/* Hamburguesa */}
@@ -125,6 +135,10 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/movie/:id" element={<MovieDetail />} />
           <Route path="/tv/:id" element={<TVDetail />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/watchlist" element={<Watchlist />} />
+          <Route path="/auth/signin" element={<SignIn />} />
+          <Route path="/auth/signout" element={<SignOut />} />
         </Routes>
       </main>
 

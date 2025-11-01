@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Modelo de Usuario
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  username  String?  @unique
+  name      String?
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones con funcionalidades de películas
+  favorites    Favorite[]
+  watchlist    Watchlist[]
+  ratings      Rating[]
+  lists        MovieList[]
+  listItems    ListItem[]
+
+  @@map("users")
+}
+
+// Modelo para películas/series favoritas
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  mediaId   Int      // ID de TMDB
+  mediaType String   // "movie" o "tv"
+  title     String
+  posterPath String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, mediaId, mediaType])
+  @@map("favorites")
+}
+
+// Modelo para watchlist (lista para ver)
+model Watchlist {
+  id        String   @id @default(cuid())
+  userId    String
+  mediaId   Int      // ID de TMDB
+  mediaType String   // "movie" o "tv"
+  title     String
+  posterPath String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, mediaId, mediaType])
+  @@map("watchlist")
+}
+
+// Modelo para calificaciones de usuario
+model Rating {
+  id        String   @id @default(cuid())
+  userId    String
+  mediaId   Int      // ID de TMDB
+  mediaType String   // "movie" o "tv"
+  rating    Float    // 1-10
+  title     String
+  posterPath String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, mediaId, mediaType])
+  @@map("ratings")
+}
+
+// Modelo para listas personalizadas
+model MovieList {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  isPublic    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items ListItem[]
+
+  @@map("movie_lists")
+}
+
+// Elementos de las listas personalizadas
+model ListItem {
+  id        String   @id @default(cuid())
+  listId    String
+  mediaId   Int      // ID de TMDB
+  mediaType String   // "movie" o "tv"
+  title     String
+  posterPath String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  list MovieList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  user User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@unique([listId, mediaId, mediaType])
+  @@map("list_items")
+}
