@@ -124,7 +124,13 @@ app.post('/api/movie-analysis', async (req, res) => {
       return res.status(400).json({ error: 'Movie title is required' });
     }
     
-    const analysis = await movieAnalysisAPI.handleMovieAnalysis(movieTitle, movieYear, movieGenres);
+    // Usar año actual si no se proporciona
+    const releaseYear = movieYear || new Date().getFullYear();
+    
+    const analysis = await movieAnalysisAPI.handleMovieAnalysis({
+      movieTitle,
+      releaseYear
+    });
     res.json(analysis);
   } catch (error) {
     console.error('Movie analysis error:', error);
