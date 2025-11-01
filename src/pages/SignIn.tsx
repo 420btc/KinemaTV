@@ -40,7 +40,7 @@ export default function SignIn() {
     <div className="min-h-screen bg-[#0a0e1a] flex items-center justify-center p-4">
       <div className="bg-[#101523] rounded-lg p-8 w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Scenra</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">KinemaTV</h1>
           <p className="text-gray-400">Descubre tu próxima película favorita</p>
         </div>
 

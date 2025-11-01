@@ -82,7 +82,7 @@ export default function Home() {
     }) => (
         <section className="relative mb-14 animate-fadeIn">
             <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl md:text-2xl font-bold text-scenra-yellow tracking-wide">
+                <h2 className="text-xl md:text-2xl font-bold text-kinematv-yellow tracking-wide">
                     {title}
                 </h2>
             </div>
@@ -116,7 +116,7 @@ export default function Home() {
                                     <h3 className="text-sm font-semibold truncate w-full">
                                         {movie.title || movie.name}
                                     </h3>
-                                    <p className="text-scenra-yellow text-xs mt-1">
+                                    <p className="text-kinematv-yellow text-xs mt-1">
                                         ⭐ {movie.vote_average.toFixed(1)}
                                     </p>
                                 </div>
@@ -134,7 +134,7 @@ export default function Home() {
                 {/* 🔘 Flechas visibles solo en desktop */}
                 <button
                     onClick={() => scroll(refEl, "left")}
-                    className="hidden sm:flex absolute left-0 top-0 bottom-0 w-10 md:w-12 items-center justify-center bg-gradient-to-r from-[#0a0e1a]/80 to-transparent text-scenra-yellow opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    className="hidden sm:flex absolute left-0 top-0 bottom-0 w-10 md:w-12 items-center justify-center bg-gradient-to-r from-[#0a0e1a]/80 to-transparent text-kinematv-yellow opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     aria-label="Deslizar a la izquierda"
                 >
                     <svg
@@ -155,7 +155,7 @@ export default function Home() {
 
                 <button
                     onClick={() => scroll(refEl, "right")}
-                    className="hidden sm:flex absolute right-0 top-0 bottom-0 w-10 md:w-12 items-center justify-center bg-gradient-to-l from-[#0a0e1a]/80 to-transparent text-scenra-yellow opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    className="hidden sm:flex absolute right-0 top-0 bottom-0 w-10 md:w-12 items-center justify-center bg-gradient-to-l from-[#0a0e1a]/80 to-transparent text-kinematv-yellow opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     aria-label="Deslizar a la derecha"
                 >
                     <svg

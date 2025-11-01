@@ -7,7 +7,7 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                scenra: {
+                kinematv: {
                     yellow: "#facc15",
                     dark: "#0a0e1a",
                     gray: "#1f1f1f",

@@ -1,4 +1,4 @@
-# 🎬 YouTMDB - Tu Plataforma de Películas y Series
+# 🎬 KinemaTV - Tu Plataforma de Películas y Series
 
 Una aplicación web moderna y completa para explorar, buscar y organizar películas y series de TV, con funcionalidades avanzadas como tier lists personalizados y gestión de favoritos.
 
@@ -57,7 +57,7 @@ Una aplicación web moderna y completa para explorar, buscar y organizar pelícu
 ### 1. Clonar el repositorio
 ```bash
 git clone <repository-url>
-cd Scenra-app-main
+cd kinematv-app
 ```
 
 ### 2. Instalar dependencias
@@ -193,4 +193,4 @@ Para preguntas o sugerencias, puedes abrir un issue en el repositorio.
 
 ---
 
-**¡Disfruta explorando el mundo del cine con YouTMDB! 🍿**
+**¡Disfruta explorando el mundo del cine con KinemaTV! 🍿**
