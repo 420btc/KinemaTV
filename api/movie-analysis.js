@@ -6,7 +6,7 @@ export default async function handler(req, res) {
 
   try {
     // Importar dinámicamente el módulo de análisis de películas
-    const movieAnalysisModule = await import('../src/api/movie-analysis.ts');
+    const movieAnalysisModule = await import('../src/api/movie-analysis.js');
     
     // Extraer datos del cuerpo de la petición
     const { movieTitle, movieYear, movieGenres } = req.body;
