@@ -11,6 +11,7 @@ import {
 import { FavoriteButton } from "../components/FavoriteButton";
 import { WatchlistButton } from "../components/WatchlistButton";
 import { CelestialSphere } from "../components/ui/celestial-sphere";
+import { SeasonalCuration } from "../components/SeasonalCuration";
 import type { Movie } from "../services/tmdb";
 
 // Tipo de ref (permite null sin romper TypeScript)
@@ -188,7 +189,7 @@ export default function Home() {
         <div className="relative min-h-screen">
             {/* Shader de fondo */}
             <CelestialSphere
-                hue={11}
+                hue={10}
                 speed={0.9}
                 zoom={1.8}
                 particleSize={2.5}
@@ -207,6 +208,10 @@ export default function Home() {
                     movies={trendingMoviesToday}
                     refEl={trendingMoviesTodayRef}
                 />
+                
+                {/* Seasonal Curation */}
+                <SeasonalCuration className="my-12" />
+                
                 <Section 
                     title="🎬 En cines ahora" 
                     movies={nowPlaying} 
