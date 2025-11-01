@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { getMovieDetails } from "../services/tmdb";
 import { FavoriteButton } from "../components/FavoriteButton";
 import { WatchlistButton } from "../components/WatchlistButton";
+import { fetchMovieAnalysis, fetchActorDetails } from "../services/movieAnalysis";
+import type { MovieAnalysis, ActorDetails } from "../api/openai";
 import type { FC } from "react";
 
 interface MovieDetails {
@@ -28,6 +30,15 @@ const MovieDetail: FC = () => {
     const [movie, setMovie] = useState<MovieDetails | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    
+    // Estados para análisis avanzado
+    const [movieAnalysis, setMovieAnalysis] = useState<MovieAnalysis | null>(null);
+    const [analysisLoading, setAnalysisLoading] = useState(false);
+    const [analysisError, setAnalysisError] = useState<string | null>(null);
+    const [showAnalysis, setShowAnalysis] = useState(false);
+    const [selectedActor, setSelectedActor] = useState<string | null>(null);
+    const [actorDetails, setActorDetails] = useState<ActorDetails | null>(null);
+    const [actorLoading, setActorLoading] = useState(false);
 
     // 🔹 Detectar si estamos en película o serie según la ruta
     const isTV = window.location.pathname.includes("/tv/");
@@ -47,6 +58,44 @@ const MovieDetail: FC = () => {
 
     const handleBack = () => {
         navigate(`/explore?type=${isTV ? "tv" : "movie"}`);
+    };
+
+    // Función para obtener análisis avanzado
+    const handleGetAnalysis = async () => {
+        if (!movie) return;
+        
+        setAnalysisLoading(true);
+        setAnalysisError(null);
+        
+        try {
+            const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : undefined;
+            const genres = movie.genres?.map(g => g.name);
+            const analysis = await fetchMovieAnalysis(movie.title, releaseYear, genres);
+            
+            setMovieAnalysis(analysis);
+            setShowAnalysis(true);
+        } catch (error) {
+            setAnalysisError('Error al conectar con el servicio de análisis');
+            console.error('Analysis error:', error);
+        } finally {
+            setAnalysisLoading(false);
+        }
+    };
+
+    // Función para obtener detalles de actor
+    const handleActorClick = async (actorName: string) => {
+        setSelectedActor(actorName);
+        setActorLoading(true);
+        
+        try {
+            const details = await fetchActorDetails(actorName);
+            setActorDetails(details);
+        } catch (error) {
+            console.error('Error fetching actor details:', error);
+            setActorDetails(null);
+        } finally {
+            setActorLoading(false);
+        }
     };
 
     if (loading)
@@ -151,7 +200,8 @@ const MovieDetail: FC = () => {
                             {movie.credits.cast.slice(0, 10).map((actor) => (
                                 <div
                                     key={actor.id}
-                                    className="w-24 text-center flex-shrink-0 bg-[#1a1f2e] rounded-lg p-2"
+                                    className="w-24 text-center flex-shrink-0 bg-[#1a1f2e] rounded-lg p-2 cursor-pointer hover:bg-[#252b3d] transition-colors"
+                                    onClick={() => handleActorClick(actor.name)}
                                 >
                                     {actor.profile_path ? (
                                         <img
@@ -170,6 +220,294 @@ const MovieDetail: FC = () => {
                         </div>
                     </div>
                 ) : null}
+
+                {/* 🤖 Botón de Análisis Avanzado con IA */}
+                <div className="mb-8">
+                    <motion.button
+                        onClick={handleGetAnalysis}
+                        disabled={analysisLoading}
+                        className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 
+                            hover:from-purple-700 hover:to-blue-700 disabled:from-gray-600 disabled:to-gray-700
+                            text-white font-semibold rounded-lg shadow-lg transition-all duration-300
+                            flex items-center justify-center gap-3"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        {analysisLoading ? (
+                            <>
+                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                                Analizando con IA...
+                            </>
+                        ) : (
+                            <>
+                                🤖 Análisis Avanzado con IA
+                            </>
+                        )}
+                    </motion.button>
+                    
+                    {analysisError && (
+                        <p className="text-red-400 text-sm mt-2">{analysisError}</p>
+                    )}
+                </div>
+
+                {/* 📊 Sección de Análisis Avanzado */}
+                {showAnalysis && movieAnalysis && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="mb-8 bg-gradient-to-br from-[#1a1f2e] to-[#252b3d] rounded-xl p-6 border border-purple-500/20"
+                    >
+                        <h3 className="text-2xl font-bold text-purple-400 mb-6 flex items-center gap-2">
+                            🤖 Análisis Avanzado con IA
+                        </h3>
+
+                        {/* Taquilla */}
+                        <div className="mb-6">
+                            <h4 className="text-lg font-semibold text-yellow-400 mb-3">💰 Taquilla</h4>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <div className="bg-[#0f172a] p-3 rounded-lg">
+                                    <p className="text-gray-400 text-sm">Presupuesto</p>
+                                    <p className="text-white font-semibold">{movieAnalysis.boxOffice.budget}</p>
+                                </div>
+                                <div className="bg-[#0f172a] p-3 rounded-lg">
+                                    <p className="text-gray-400 text-sm">Mundial</p>
+                                    <p className="text-white font-semibold">{movieAnalysis.boxOffice.worldwide}</p>
+                                </div>
+                                <div className="bg-[#0f172a] p-3 rounded-lg">
+                                    <p className="text-gray-400 text-sm">Doméstica</p>
+                                    <p className="text-white font-semibold">{movieAnalysis.boxOffice.domestic}</p>
+                                </div>
+                                <div className="bg-[#0f172a] p-3 rounded-lg">
+                                    <p className="text-gray-400 text-sm">Internacional</p>
+                                    <p className="text-white font-semibold">{movieAnalysis.boxOffice.international}</p>
+                                </div>
+                            </div>
+                            <p className="text-gray-300 mt-3">{movieAnalysis.boxOffice.profitability}</p>
+                        </div>
+
+                        {/* Reparto Detallado */}
+                        <div className="mb-6">
+                            <h4 className="text-lg font-semibold text-yellow-400 mb-3">🎭 Reparto Detallado</h4>
+                            <div className="space-y-4">
+                                {movieAnalysis.cast.slice(0, 5).map((actor, index) => (
+                                    <div key={index} className="bg-[#0f172a] p-4 rounded-lg">
+                                        <div className="flex justify-between items-start mb-2">
+                                            <h5 className="font-semibold text-white">{actor.name}</h5>
+                                            <span className="text-gray-400 text-sm">como {actor.character}</span>
+                                        </div>
+                                        <p className="text-gray-300 text-sm mb-2">{actor.biography}</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {actor.filmography.slice(0, 3).map((film, filmIndex) => (
+                                                <span key={filmIndex} className="bg-purple-600/20 text-purple-300 px-2 py-1 rounded text-xs">
+                                                    {film}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Producción */}
+                        <div className="mb-6">
+                            <h4 className="text-lg font-semibold text-yellow-400 mb-3">🎬 Producción</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="bg-[#0f172a] p-3 rounded-lg">
+                                    <p className="text-gray-400 text-sm">Estudio</p>
+                                    <p className="text-white">{movieAnalysis.production.studio}</p>
+                                </div>
+                                <div className="bg-[#0f172a] p-3 rounded-lg">
+                                    <p className="text-gray-400 text-sm">Director</p>
+                                    <p className="text-white">{movieAnalysis.production.director}</p>
+                                </div>
+                                <div className="bg-[#0f172a] p-3 rounded-lg">
+                                    <p className="text-gray-400 text-sm">Productores</p>
+                                    <p className="text-white">{movieAnalysis.production.producers.join(', ')}</p>
+                                </div>
+                                <div className="bg-[#0f172a] p-3 rounded-lg">
+                                    <p className="text-gray-400 text-sm">Guionistas</p>
+                                    <p className="text-white">{movieAnalysis.production.writers.join(', ')}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Recepción Crítica */}
+                        <div className="mb-6">
+                            <h4 className="text-lg font-semibold text-yellow-400 mb-3">⭐ Recepción Crítica</h4>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                                <div className="bg-[#0f172a] p-3 rounded-lg text-center">
+                                    <p className="text-gray-400 text-sm">Rotten Tomatoes</p>
+                                    <p className="text-white font-semibold">{movieAnalysis.criticalReception.rottenTomatoes}</p>
+                                </div>
+                                <div className="bg-[#0f172a] p-3 rounded-lg text-center">
+                                    <p className="text-gray-400 text-sm">IMDb</p>
+                                    <p className="text-white font-semibold">{movieAnalysis.criticalReception.imdb}</p>
+                                </div>
+                                <div className="bg-[#0f172a] p-3 rounded-lg text-center">
+                                    <p className="text-gray-400 text-sm">Metacritic</p>
+                                    <p className="text-white font-semibold">{movieAnalysis.criticalReception.metacritic}</p>
+                                </div>
+                            </div>
+                            <p className="text-gray-300 italic">{movieAnalysis.criticalReception.criticsConsensus}</p>
+                        </div>
+
+                        {/* Premios */}
+                        {(movieAnalysis.awards.oscars.length > 0 || movieAnalysis.awards.goldenGlobes.length > 0) && (
+                            <div className="mb-6">
+                                <h4 className="text-lg font-semibold text-yellow-400 mb-3">🏆 Premios</h4>
+                                <div className="space-y-3">
+                                    {movieAnalysis.awards.oscars.length > 0 && (
+                                        <div>
+                                            <p className="text-orange-400 font-semibold mb-1">Premios Oscar:</p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {movieAnalysis.awards.oscars.map((award, index) => (
+                                                    <span key={index} className="bg-orange-600/20 text-orange-300 px-2 py-1 rounded text-sm">
+                                                        {award}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                    {movieAnalysis.awards.goldenGlobes.length > 0 && (
+                                        <div>
+                                            <p className="text-yellow-400 font-semibold mb-1">Globos de Oro:</p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {movieAnalysis.awards.goldenGlobes.map((award, index) => (
+                                                    <span key={index} className="bg-yellow-600/20 text-yellow-300 px-2 py-1 rounded text-sm">
+                                                        {award}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Impacto Cultural */}
+                        <div className="mb-6">
+                            <h4 className="text-lg font-semibold text-yellow-400 mb-3">🌟 Impacto Cultural</h4>
+                            <div className="space-y-3">
+                                <div>
+                                    <p className="text-gray-400 text-sm mb-1">Legado:</p>
+                                    <p className="text-gray-300">{movieAnalysis.culturalImpact.legacy}</p>
+                                </div>
+                                <div>
+                                    <p className="text-gray-400 text-sm mb-1">Influencia:</p>
+                                    <p className="text-gray-300">{movieAnalysis.culturalImpact.influence}</p>
+                                </div>
+                                {movieAnalysis.culturalImpact.trivia.length > 0 && (
+                                    <div>
+                                        <p className="text-gray-400 text-sm mb-2">Datos curiosos:</p>
+                                        <ul className="space-y-1">
+                                            {movieAnalysis.culturalImpact.trivia.map((fact, index) => (
+                                                <li key={index} className="text-gray-300 text-sm flex items-start gap-2">
+                                                    <span className="text-purple-400 mt-1">•</span>
+                                                    {fact}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Aspectos Técnicos */}
+                        <div>
+                            <h4 className="text-lg font-semibold text-yellow-400 mb-3">🎨 Aspectos Técnicos</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="bg-[#0f172a] p-3 rounded-lg">
+                                    <p className="text-gray-400 text-sm mb-1">Cinematografía</p>
+                                    <p className="text-gray-300 text-sm">{movieAnalysis.technicalAspects.cinematography}</p>
+                                </div>
+                                <div className="bg-[#0f172a] p-3 rounded-lg">
+                                    <p className="text-gray-400 text-sm mb-1">Banda Sonora</p>
+                                    <p className="text-gray-300 text-sm">{movieAnalysis.technicalAspects.soundtrack}</p>
+                                </div>
+                                <div className="bg-[#0f172a] p-3 rounded-lg">
+                                    <p className="text-gray-400 text-sm mb-1">Efectos Visuales</p>
+                                    <p className="text-gray-300 text-sm">{movieAnalysis.technicalAspects.visualEffects}</p>
+                                </div>
+                                <div className="bg-[#0f172a] p-3 rounded-lg">
+                                    <p className="text-gray-400 text-sm mb-1">Montaje</p>
+                                    <p className="text-gray-300 text-sm">{movieAnalysis.technicalAspects.editing}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* Modal de Detalles del Actor */}
+                {selectedActor && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50"
+                        onClick={() => setSelectedActor(null)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            className="bg-[#1a1f2e] rounded-xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="flex justify-between items-center mb-4">
+                                <h3 className="text-xl font-bold text-yellow-400">{selectedActor}</h3>
+                                <button
+                                    onClick={() => setSelectedActor(null)}
+                                    className="text-gray-400 hover:text-white text-2xl"
+                                >
+                                    ×
+                                </button>
+                            </div>
+                            
+                            {actorLoading ? (
+                                <div className="flex items-center justify-center py-8">
+                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400"></div>
+                                </div>
+                            ) : actorDetails ? (
+                                <div className="space-y-4">
+                                    <div>
+                                        <h4 className="text-lg font-semibold text-purple-400 mb-2">Biografía</h4>
+                                        <p className="text-gray-300">{actorDetails.biography}</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <h4 className="text-lg font-semibold text-purple-400 mb-2">Filmografía Destacada</h4>
+                                        <div className="flex flex-wrap gap-2">
+                                            {actorDetails.filmography.map((film: string, index: number) => (
+                                                <span key={index} className="bg-blue-600/20 text-blue-300 px-2 py-1 rounded text-sm">
+                                                    {film}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    
+                                    {actorDetails.awards.length > 0 && (
+                                        <div>
+                                            <h4 className="text-lg font-semibold text-purple-400 mb-2">Premios</h4>
+                                            <div className="flex flex-wrap gap-2">
+                                                {actorDetails.awards.map((award: string, index: number) => (
+                                                    <span key={index} className="bg-orange-600/20 text-orange-300 px-2 py-1 rounded text-sm">
+                                                        {award}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                    
+                                    <div>
+                                        <h4 className="text-lg font-semibold text-purple-400 mb-2">Información Personal</h4>
+                                        <p className="text-gray-300">{actorDetails.personalLife}</p>
+                                    </div>
+                                </div>
+                            ) : (
+                                <p className="text-gray-400">No se pudo cargar la información del actor.</p>
+                            )}
+                        </motion.div>
+                    </motion.div>
+                )}
             </div>
 
             {/* 🔘 Botón flotante (solo móvil) */}

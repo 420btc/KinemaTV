@@ -11,17 +11,19 @@ app.use(cors());
 app.use(express.json());
 
 // Importaciones dinámicas para las funciones de API
-let userAPI, favoritesAPI, watchlistAPI;
+let userAPI, favoritesAPI, watchlistAPI, movieAnalysisAPI;
 
 async function initializeAPIs() {
   try {
     const userModule = await import('./src/api/user.ts');
     const favoritesModule = await import('./src/api/favorites.ts');
     const watchlistModule = await import('./src/api/watchlist.ts');
+    const movieAnalysisModule = await import('./src/api/movie-analysis.ts');
     
     userAPI = userModule;
     favoritesAPI = favoritesModule;
     watchlistAPI = watchlistModule;
+    movieAnalysisAPI = movieAnalysisModule;
   } catch (error) {
     console.error('Error loading API modules:', error);
   }
@@ -110,6 +112,39 @@ app.delete('/api/watchlist/:userId/:movieId', async (req, res) => {
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+// Movie Analysis routes
+app.post('/api/movie-analysis', async (req, res) => {
+  try {
+    const { movieTitle, movieYear, movieGenres } = req.body;
+    
+    if (!movieTitle) {
+      return res.status(400).json({ error: 'Movie title is required' });
+    }
+    
+    const analysis = await movieAnalysisAPI.handleMovieAnalysis(movieTitle, movieYear, movieGenres);
+    res.json(analysis);
+  } catch (error) {
+    console.error('Movie analysis error:', error);
+    res.status(500).json({ error: 'Error analyzing movie' });
+  }
+});
+
+app.post('/api/actor-details', async (req, res) => {
+  try {
+    const { actorName } = req.body;
+    
+    if (!actorName) {
+      return res.status(400).json({ error: 'Actor name is required' });
+    }
+    
+    const details = await movieAnalysisAPI.handleActorDetails(actorName);
+    res.json(details);
+  } catch (error) {
+    console.error('Actor details error:', error);
+    res.status(500).json({ error: 'Error fetching actor details' });
   }
 });
 
