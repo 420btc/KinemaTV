@@ -17,11 +17,11 @@ export default async function handler(req, res) {
 
   try {
     const { method, query, body } = req;
-    const { mediaId, mediaType, limit } = query;
+    const { mediaId, mediaType, limit, action } = query;
 
     switch (method) {
       case 'GET':
-        if (query.action === 'count') {
+        if (action === 'count') {
           // Get comments count
           const count = await prisma.comment.count({
             where: {
@@ -30,11 +30,21 @@ export default async function handler(req, res) {
             },
           });
           return res.json({ count });
-        } else if (query.action === 'recent') {
-          // Get recent comments
+        } else if (action === 'recent') {
+          // Get recent comments with media info
           const comments = await prisma.comment.findMany({
             orderBy: { createdAt: 'desc' },
             take: parseInt(limit) || 10,
+            select: {
+              id: true,
+              username: true,
+              content: true,
+              createdAt: true,
+              mediaId: true,
+              mediaType: true,
+              title: true,
+              posterPath: true,
+            },
           });
           return res.json(comments);
         } else {
@@ -45,6 +55,12 @@ export default async function handler(req, res) {
               mediaType,
             },
             orderBy: { createdAt: 'desc' },
+            select: {
+              id: true,
+              username: true,
+              content: true,
+              createdAt: true,
+            },
           });
           return res.json(comments);
         }
@@ -60,11 +76,14 @@ export default async function handler(req, res) {
         if (!username?.trim()) {
           return res.status(400).json({ error: 'Username cannot be empty' });
         }
-        if (content.length > 1000) {
+        if (content.trim().length > 1000) {
           return res.status(400).json({ error: 'Comment content is too long (max 1000 characters)' });
         }
-        if (username.length > 50) {
+        if (username.trim().length > 50) {
           return res.status(400).json({ error: 'Username is too long (max 50 characters)' });
+        }
+        if (!body.mediaId || !body.mediaType) {
+          return res.status(400).json({ error: 'Media ID and type are required' });
         }
 
         const comment = await prisma.comment.create({
@@ -73,19 +92,43 @@ export default async function handler(req, res) {
             mediaType: body.mediaType,
             username: username.trim(),
             content: content.trim(),
-            title,
+            title: title || null,
             posterPath: posterPath || null,
           },
         });
 
         return res.json(comment);
 
+      case 'DELETE':
+        // Delete comment (optional - for admin functionality)
+        const { commentId } = query;
+        if (!commentId) {
+          return res.status(400).json({ error: 'Comment ID is required' });
+        }
+
+        await prisma.comment.delete({
+          where: {
+            id: parseInt(commentId),
+          },
+        });
+
+        return res.json({ success: true });
+
       default:
-        res.setHeader('Allow', ['GET', 'POST']);
+        res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
         return res.status(405).end(`Method ${method} Not Allowed`);
     }
   } catch (error) {
     console.error('API Error:', error);
+    
+    // Handle specific Prisma errors
+    if (error.code === 'P2002') {
+      return res.status(400).json({ error: 'Duplicate entry' });
+    }
+    if (error.code === 'P2025') {
+      return res.status(404).json({ error: 'Record not found' });
+    }
+    
     return res.status(500).json({ error: 'Internal server error' });
   } finally {
     await prisma.$disconnect();
