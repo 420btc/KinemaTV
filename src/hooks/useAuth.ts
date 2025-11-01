@@ -1,11 +1,14 @@
 import { useUser } from '@stackframe/stack';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createOrUpdateUser } from '../api/user';
+import type { StackUserExtended } from '../types/stack-user';
+import { getEmailFromUser, getNameFromUser, getAvatarFromUser } from '../types/stack-user';
 
 export interface UserData {
   id: string;
   email: string;
-  displayName?: string;
-  profileImageUrl?: string;
+  name?: string;
+  avatar?: string;
 }
 
 export function useAuth() {
@@ -14,37 +17,45 @@ export function useAuth() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const initializeUser = async () => {
-      if (stackAuth && stackAuth.id) {
-        try {
-          // Crear o actualizar usuario en la base de datos
-          const dbUser = await fetch('/api/user', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              id: stackAuth.id,
-              email: stackAuth.primaryEmail,
-              displayName: stackAuth.displayName,
-              profileImageUrl: stackAuth.profileImageUrl,
-            }),
-          });
+    const initializeUser = async (stackUser: StackUserExtended) => {
+      try {
+        console.log('Inicializando usuario:', stackUser);
+        
+        const email = getEmailFromUser(stackUser);
+        const name = getNameFromUser(stackUser);
+        const avatar = getAvatarFromUser(stackUser);
 
-          if (dbUser.ok) {
-            const userData = await dbUser.json();
-            setUserData(userData);
-          }
-        } catch (error) {
-          console.error('Error initializing user:', error);
-        }
-      } else {
-        setUserData(null);
+        const userData = await createOrUpdateUser({
+          id: stackUser.id,
+          email: email || 'No email',
+          name: name || 'Usuario',
+          avatar: avatar || ''
+        });
+
+        console.log('Usuario creado/actualizado:', userData);
+        setUserData(userData);
+      } catch (error) {
+        console.error('Error al inicializar usuario:', error);
+        // Establecer datos básicos incluso si falla la creación en DB
+        const email = getEmailFromUser(stackUser);
+        const name = getNameFromUser(stackUser);
+        const avatar = getAvatarFromUser(stackUser);
+        
+        setUserData({
+          id: stackUser.id,
+          email: email || 'No email',
+          name: name || 'Usuario',
+          avatar: avatar || ''
+        });
       }
-      setIsLoading(false);
     };
 
-    initializeUser();
+    if (stackAuth && stackAuth.id) {
+      initializeUser(stackAuth as StackUserExtended);
+    } else {
+      setUserData(null);
+    }
+    setIsLoading(false);
   }, [stackAuth]);
 
   return {

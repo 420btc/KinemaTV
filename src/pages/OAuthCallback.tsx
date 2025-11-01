@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@stackframe/stack';
+import { createOrUpdateUser } from '../api/user';
+import type { StackUserExtended } from '../types/stack-user';
+import { getEmailFromUser, getNameFromUser, getAvatarFromUser } from '../types/stack-user';
 
 const OAuthCallback: React.FC = () => {
   const navigate = useNavigate();
@@ -26,40 +29,81 @@ const OAuthCallback: React.FC = () => {
           return;
         }
 
-        // Esperar un poco más para que Stack Auth procese el callback
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // Esperar un poco para que Stack Auth procese el callback
+        await new Promise(resolve => setTimeout(resolve, 1500));
         
         // Verificar si el usuario está autenticado
         if (user && user.id) {
           console.log('Usuario autenticado exitosamente:', user);
-          setIsProcessing(false);
-          navigate('/', { replace: true });
+          
+          try {
+            // Usar funciones helper para extraer datos de forma segura
+            const stackUser = user as StackUserExtended;
+            const email = getEmailFromUser(stackUser);
+            const name = getNameFromUser(stackUser);
+            const avatar = getAvatarFromUser(stackUser);
+            
+            // Sincronizar usuario con la base de datos local
+            await createOrUpdateUser({
+              id: user.id,
+              email,
+              name,
+              avatar,
+            });
+
+            console.log('Usuario sincronizado exitosamente con la base de datos');
+            setIsProcessing(false);
+            navigate('/', { replace: true });
+          } catch (dbError) {
+            console.error('Error al sincronizar usuario con la base de datos:', dbError);
+            // Continuar con la navegación aunque falle la sincronización
+            setIsProcessing(false);
+            navigate('/', { replace: true });
+          }
         } else {
-          // Si después de 5 segundos no hay usuario, mostrar error
-          setTimeout(() => {
-            if (!user) {
-              console.log('Timeout: No se pudo autenticar el usuario');
-              setError('No se pudo completar la autenticación. Inténtalo de nuevo.');
-              setIsProcessing(false);
-              setTimeout(() => navigate('/auth/signin', { replace: true }), 3000);
-            }
-          }, 3000);
+          // Si no hay usuario después de esperar, mostrar error
+          console.log('No se encontró usuario autenticado después del callback');
+          setError('No se pudo completar la autenticación. Inténtalo de nuevo.');
+          setIsProcessing(false);
+          setTimeout(() => navigate('/auth/signin', { replace: true }), 3000);
         }
       } catch (error) {
         console.error('Error en el callback de OAuth:', error);
-        setError('Ocurrió un error durante la autenticación.');
+        setError('Error inesperado durante la autenticación');
         setIsProcessing(false);
         setTimeout(() => navigate('/auth/signin', { replace: true }), 3000);
       }
     };
 
-    handleCallback();
-  }, [user, navigate]);
+    // Solo ejecutar si estamos procesando
+    if (isProcessing) {
+      handleCallback();
+    }
+  }, [user, navigate, isProcessing]);
 
   // Si el usuario se autentica después del efecto inicial
   useEffect(() => {
     if (user && user.id && isProcessing) {
       console.log('Usuario autenticado:', user);
+      
+      // Usar funciones helper para extraer datos de forma segura
+      const stackUser = user as StackUserExtended;
+      const email = getEmailFromUser(stackUser);
+      const name = getNameFromUser(stackUser);
+      const avatar = getAvatarFromUser(stackUser);
+      
+      // Sincronizar con la base de datos
+      createOrUpdateUser({
+        id: user.id,
+        email,
+        name,
+        avatar,
+      }).then(() => {
+        console.log('Usuario sincronizado exitosamente');
+      }).catch((error) => {
+        console.error('Error al sincronizar usuario:', error);
+      });
+      
       setIsProcessing(false);
       navigate('/', { replace: true });
     }

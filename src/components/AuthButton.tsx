@@ -1,17 +1,25 @@
 import { useUser } from '@stackframe/stack';
+import type { StackUserExtended } from '../types/stack-user';
+import { getEmailFromUser, getNameFromUser, getAvatarFromUser } from '../types/stack-user';
 import { User, LogIn, LogOut } from 'lucide-react';
 
 export function AuthButton() {
   const stackUser = useUser();
 
   if (stackUser && stackUser.id) {
+    // Usar funciones helper para extraer datos de forma segura
+    const user = stackUser as StackUserExtended;
+    const profileImage = getAvatarFromUser(user);
+    const displayName = getNameFromUser(user);
+    const email = getEmailFromUser(user);
+
     return (
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
-          {stackUser.profileImageUrl ? (
+          {profileImage ? (
             <img
-              src={stackUser.profileImageUrl}
-              alt={stackUser.displayName || 'Usuario'}
+              src={profileImage}
+              alt={displayName || 'Usuario'}
               className="w-8 h-8 rounded-full"
             />
           ) : (
@@ -20,7 +28,7 @@ export function AuthButton() {
             </div>
           )}
           <span className="text-white text-sm font-medium">
-            {stackUser.displayName || stackUser.primaryEmail}
+            {displayName || email}
           </span>
         </div>
         <button
