@@ -3,8 +3,8 @@ import { prisma } from '../lib/prisma.js';
 export async function createOrUpdateUser(userData: {
   id: string;
   email: string;
-  name?: string;
-  avatar?: string;
+  name?: string | null;
+  avatar?: string | null;
 }) {
   try {
     const user = await prisma.user.upsert({

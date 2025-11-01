@@ -7,8 +7,11 @@ import { getEmailFromUser, getNameFromUser, getAvatarFromUser } from '../types/s
 export interface UserData {
   id: string;
   email: string;
-  name?: string;
-  avatar?: string;
+  name: string | null;
+  avatar: string | null;
+  username?: string | null;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export function useAuth() {
@@ -28,8 +31,8 @@ export function useAuth() {
         const userData = await createOrUpdateUser({
           id: stackUser.id,
           email: email || 'No email',
-          name: name || 'Usuario',
-          avatar: avatar || ''
+          name: name || null,
+          avatar: avatar || null
         });
 
         console.log('Usuario creado/actualizado:', userData);
@@ -44,8 +47,8 @@ export function useAuth() {
         setUserData({
           id: stackUser.id,
           email: email || 'No email',
-          name: name || 'Usuario',
-          avatar: avatar || ''
+          name: name || null,
+          avatar: avatar || null
         });
       }
     };
