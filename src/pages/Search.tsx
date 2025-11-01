@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import type { Movie } from "../services/tmdb";
-import { searchMovies } from "../services/tmdb";
+import { searchMovies, discoverMovies } from "../services/tmdb";
 import type { FormEvent } from "react";
 
 export default function Search() {
@@ -10,6 +10,8 @@ export default function Search() {
     const [error, setError] = useState<string | null>(null);
     const [selectedYear, setSelectedYear] = useState<number | null>(null);
     const [searchInput, setSearchInput] = useState("");
+    const [minRating, setMinRating] = useState<number | null>(null);
+    const [maxRating, setMaxRating] = useState<number | null>(null);
 
     // leer query desde la URL
     const { search } = useLocation();
@@ -26,15 +28,25 @@ export default function Search() {
         setLoading(true);
         setError(null);
 
-        searchMovies(query, selectedYear || undefined)
+        searchMovies(query, selectedYear || undefined, minRating || undefined, maxRating || undefined)
             .then((data) => setMovies(data.results))
             .catch(() => setError("Error en la búsqueda"))
             .finally(() => setLoading(false));
-    }, [query, selectedYear]);
+    }, [query, selectedYear, minRating, maxRating]);
 
     const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const year = event.target.value;
         setSelectedYear(year ? parseInt(year) : null);
+    };
+
+    const handleMinRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setMinRating(value ? parseFloat(value) : null);
+    };
+
+    const handleMaxRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setMaxRating(value ? parseFloat(value) : null);
     };
 
     const handleLocalSearch = (e: FormEvent) => {
@@ -88,6 +100,38 @@ export default function Search() {
                         </select>
                     </div>
                     <div className="sm:self-end">
+                        <label htmlFor="min-rating" className="block text-sm font-medium text-gray-300 mb-2">
+                            Puntuación mínima:
+                        </label>
+                        <input
+                            id="min-rating"
+                            type="number"
+                            min="1.0"
+                            max="9.9"
+                            step="0.1"
+                            value={minRating || ""}
+                            onChange={handleMinRatingChange}
+                            placeholder="1.0"
+                            className="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-32 p-3"
+                        />
+                    </div>
+                    <div className="sm:self-end">
+                        <label htmlFor="max-rating" className="block text-sm font-medium text-gray-300 mb-2">
+                            Puntuación máxima:
+                        </label>
+                        <input
+                            id="max-rating"
+                            type="number"
+                            min="1.0"
+                            max="9.9"
+                            step="0.1"
+                            value={maxRating || ""}
+                            onChange={handleMaxRatingChange}
+                            placeholder="9.9"
+                            className="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-32 p-3"
+                        />
+                    </div>
+                    <div className="sm:self-end">
                         <button
                             type="submit"
                             className="bg-gradient-to-r from-orange-400 to-yellow-400 text-black px-6 py-3 text-sm font-semibold rounded-lg transition hover:opacity-90 w-full sm:w-auto"
@@ -108,6 +152,11 @@ export default function Search() {
                                 (año {selectedYear})
                             </span>
                         )}
+                        {(minRating || maxRating) && (
+                            <span className="text-gray-400 text-lg ml-2">
+                                (puntuación: {minRating || "1.0"} - {maxRating || "9.9"} ⭐)
+                            </span>
+                        )}
                     </h3>
                 </>
             )}
@@ -119,7 +168,10 @@ export default function Search() {
                     {loading && <p>Cargando...</p>}
                     {error && <p className="text-red-500">{error}</p>}
                     {!loading && !error && movies.length === 0 && (
-                        <p>No se encontraron resultados para "{query}"{selectedYear && ` en el año ${selectedYear}`}.</p>
+                        <p>No se encontraron resultados para "{query}"
+                            {selectedYear && ` en el año ${selectedYear}`}
+                            {(minRating || maxRating) && ` con puntuación entre ${minRating || "1.0"} y ${maxRating || "9.9"}`}.
+                        </p>
                     )}
 
                     {/* Resultados */}

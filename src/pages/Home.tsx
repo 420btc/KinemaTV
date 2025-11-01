@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 import {
     getTrendingMovies,
     getTopRatedMovies,
-    getPopularMovies,
+    getNowPlayingMovies,
+    getTrendingTV,
+    getTopRatedTV,
+    discoverMovies,
 } from "../services/tmdb";
 import { FavoriteButton } from "../components/FavoriteButton";
 import { WatchlistButton } from "../components/WatchlistButton";
@@ -13,15 +16,23 @@ import type { Movie } from "../services/tmdb";
 type DivRef = React.MutableRefObject<HTMLDivElement | null>;
 
 export default function Home() {
-    const [trending, setTrending] = useState<Movie[]>([]);
+    const [trendingMovies, setTrendingMovies] = useState<Movie[]>([]);
+    const [trendingMoviesToday, setTrendingMoviesToday] = useState<Movie[]>([]);
     const [topRated, setTopRated] = useState<Movie[]>([]);
-    const [popular, setPopular] = useState<Movie[]>([]);
+    const [nowPlaying, setNowPlaying] = useState<Movie[]>([]);
+    const [trendingTV, setTrendingTV] = useState<Movie[]>([]);
+    const [topRatedTV, setTopRatedTV] = useState<Movie[]>([]);
+    const [recentMovies, setRecentMovies] = useState<Movie[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const trendingRef = useRef<HTMLDivElement | null>(null);
+    const trendingMoviesRef = useRef<HTMLDivElement | null>(null);
+    const trendingMoviesTodayRef = useRef<HTMLDivElement | null>(null);
     const topRatedRef = useRef<HTMLDivElement | null>(null);
-    const popularRef = useRef<HTMLDivElement | null>(null);
+    const nowPlayingRef = useRef<HTMLDivElement | null>(null);
+    const trendingTVRef = useRef<HTMLDivElement | null>(null);
+    const topRatedTVRef = useRef<HTMLDivElement | null>(null);
+    const recentMoviesRef = useRef<HTMLDivElement | null>(null);
 
     // Función para hacer scroll lateral suave
     const scroll = (ref: DivRef, direction: "left" | "right") => {
@@ -32,13 +43,25 @@ export default function Home() {
     };
 
     useEffect(() => {
-        Promise.all([getTrendingMovies(), getTopRatedMovies(), getPopularMovies()])
-            .then(([t, top, pop]) => {
-                setTrending(t.results);
+        Promise.all([
+            getTrendingMovies('week'),
+            getTrendingMovies('day'),
+            getTopRatedMovies(),
+            getNowPlayingMovies(),
+            getTrendingTV('week'),
+            getTopRatedTV(),
+            discoverMovies({ sortBy: 'release_date.desc', year: new Date().getFullYear() })
+        ])
+            .then(([trendWeek, trendDay, top, now, tvTrend, tvTop, recent]) => {
+                setTrendingMovies(trendWeek.results);
+                setTrendingMoviesToday(trendDay.results);
                 setTopRated(top.results);
-                setPopular(pop.results);
+                setNowPlaying(now.results);
+                setTrendingTV(tvTrend.results);
+                setTopRatedTV(tvTop.results);
+                setRecentMovies(recent.results);
             })
-            .catch(() => setError("Error al cargar películas"))
+            .catch(() => setError("Error al cargar contenido"))
             .finally(() => setLoading(false));
     }, []);
 
@@ -50,10 +73,12 @@ export default function Home() {
         title,
         movies,
         refEl,
+        isTV = false,
     }: {
         title: string;
         movies: Movie[];
         refEl: DivRef;
+        isTV?: boolean;
     }) => (
         <section className="relative mb-14 animate-fadeIn">
             <div className="flex items-center justify-between mb-4">
@@ -74,11 +99,11 @@ export default function Home() {
                             className="min-w-[160px] sm:min-w-[180px] md:min-w-[200px] bg-[#101523] rounded-lg overflow-hidden shadow-md hover:shadow-glow hover:scale-105 transition-transform duration-300 flex-shrink-0 relative group"
                             style={{ height: "310px" }}
                         >
-                            <Link to={`/movie/${movie.id}`} className="block">
+                            <Link to={isTV ? `/tv/${movie.id}` : `/movie/${movie.id}`} className="block">
                                 {movie.poster_path ? (
                                     <img
                                         src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                                        alt={movie.title}
+                                        alt={movie.title || movie.name}
                                         className="w-full h-[250px] object-cover"
                                         loading="lazy"
                                     />
@@ -89,7 +114,7 @@ export default function Home() {
                                 )}
                                 <div className="p-2">
                                     <h3 className="text-sm font-semibold truncate w-full">
-                                        {movie.title}
+                                        {movie.title || movie.name}
                                     </h3>
                                     <p className="text-scenra-yellow text-xs mt-1">
                                         ⭐ {movie.vote_average.toFixed(1)}
@@ -157,12 +182,42 @@ export default function Home() {
     return (
         <div className="px-2 sm:px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
             <Section
-                title="En tendencia esta semana"
-                movies={trending}
-                refEl={trendingRef}
+                title="🔥 Tendencia esta semana"
+                movies={trendingMovies}
+                refEl={trendingMoviesRef}
             />
-            <Section title="Más valoradas" movies={topRated} refEl={topRatedRef} />
-            <Section title="Populares" movies={popular} refEl={popularRef} />
+            <Section
+                title="⚡ Tendencia hoy"
+                movies={trendingMoviesToday}
+                refEl={trendingMoviesTodayRef}
+            />
+            <Section 
+                title="🎬 En cines ahora" 
+                movies={nowPlaying} 
+                refEl={nowPlayingRef} 
+            />
+            <Section 
+                title="⭐ Mejor valoradas" 
+                movies={topRated} 
+                refEl={topRatedRef} 
+            />
+            <Section 
+                title="🆕 Estrenos recientes 2024" 
+                movies={recentMovies} 
+                refEl={recentMoviesRef} 
+            />
+            <Section
+                title="📺 Series en tendencia"
+                movies={trendingTV}
+                refEl={trendingTVRef}
+                isTV={true}
+            />
+            <Section
+                title="⭐ Series mejor valoradas"
+                movies={topRatedTV}
+                refEl={topRatedTVRef}
+                isTV={true}
+            />
         </div>
     );
 }
