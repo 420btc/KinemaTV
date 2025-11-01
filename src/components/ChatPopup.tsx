@@ -38,6 +38,28 @@ export const ChatPopup: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { contextData, updateMovieData, updateSeriesData } = useChatContext();
 
+  // Función para renderizar contenido con imágenes
+  const renderMessageContent = (content: string) => {
+    // Detectar URLs de imágenes (TMDB)
+    const imageUrlRegex = /(https:\/\/image\.tmdb\.org\/t\/p\/w\d+\/[^\s]+)/g;
+    const parts = content.split(imageUrlRegex);
+    
+    return parts.map((part, index) => {
+      if (part.match(imageUrlRegex)) {
+        return (
+          <img
+            key={index}
+            src={part}
+            alt="Imagen de película/serie"
+            className="max-w-full h-auto rounded-lg mt-2 mb-2"
+            style={{ maxHeight: '200px' }}
+          />
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
+
   // Auto-scroll al final de los mensajes
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -83,6 +105,16 @@ export const ChatPopup: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // Agregar el mensaje del usuario tal como viene (con toda la información)
+      const userMessage: Message = {
+        id: Date.now().toString(),
+        content: message,
+        isUser: true,
+        timestamp: new Date()
+      };
+
+      setMessages(prev => [...prev, userMessage]);
+
       // Actualizar el contexto con los datos del contenido
       if (contentType === 'movie') {
         updateMovieData(contentData as MovieData);
@@ -148,20 +180,9 @@ export const ChatPopup: React.FC = () => {
       // Abrir el chat si está cerrado
       setIsOpen(true);
       
-      // Agregar el mensaje al chat
-      const chatMessage: Message = {
-        id: Date.now().toString(),
-        content: message,
-        isUser: true,
-        timestamp: new Date()
-      };
-      
-      setMessages(prev => [...prev, chatMessage]);
-      
       // Enviar automáticamente el mensaje al servicio de chat
-      setTimeout(() => {
-        handleAutoSendMessage(message, contentData, contentType);
-      }, 500);
+      // (handleAutoSendMessage se encargará de agregar el mensaje del usuario)
+      handleAutoSendMessage(message, contentData, contentType);
     };
 
     window.addEventListener('sendToChat', handleSendToChat as EventListener);
@@ -304,7 +325,7 @@ export const ChatPopup: React.FC = () => {
                       : 'bg-[#2A3441] text-slate-100'
                   }`}
                 >
-                  {message.content}
+                  {renderMessageContent(message.content)}
                 </div>
               </div>
             ))}

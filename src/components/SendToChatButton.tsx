@@ -46,7 +46,9 @@ export const SendToChatButton: React.FC<SendToChatButtonProps> = ({ movie, serie
     const genres = content.genres?.map(g => g.name).join(', ') || '';
     
     // Crear mensaje con información del contenido
-    const messageContent = `📺 **${title}** ${posterUrl ? `\n\n![${title}](${posterUrl})` : ''}
+    const messageContent = `📺 **${title}**
+
+${posterUrl || ''}
 
 **Información:**
 - ${type === 'movie' ? 'Fecha de estreno' : 'Primera emisión'}: ${releaseInfo || 'No disponible'}
