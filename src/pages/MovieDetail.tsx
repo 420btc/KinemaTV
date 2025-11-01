@@ -221,7 +221,7 @@ const MovieDetail: FC = () => {
                     </div>
                 ) : null}
 
-                {/* 🤖 Botón de Análisis Avanzado con IA */}
+                {/* 🤖 Botón de Análisis Avanzado */}
                 <div className="mb-8">
                     <motion.button
                         onClick={handleGetAnalysis}
@@ -236,11 +236,11 @@ const MovieDetail: FC = () => {
                         {analysisLoading ? (
                             <>
                                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                                Analizando con IA...
+                                Analizando...
                             </>
                         ) : (
                             <>
-                                🤖 Análisis Avanzado con IA
+                                🤖 Análisis Avanzado
                             </>
                         )}
                     </motion.button>
@@ -259,7 +259,7 @@ const MovieDetail: FC = () => {
                         className="mb-8 bg-gradient-to-br from-[#1a1f2e] to-[#252b3d] rounded-xl p-6 border border-purple-500/20"
                     >
                         <h3 className="text-2xl font-bold text-purple-400 mb-6 flex items-center gap-2">
-                            🤖 Análisis Avanzado con IA
+                            🤖 Análisis Avanzado
                         </h3>
 
                         {/* Taquilla */}
