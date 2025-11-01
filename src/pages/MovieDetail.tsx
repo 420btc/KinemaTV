@@ -7,6 +7,7 @@ import { WatchlistButton } from "../components/WatchlistButton";
 import { SendToChatButton } from "../components/SendToChatButton";
 import { CelestialSphere } from "../components/ui/celestial-sphere";
 import { fetchMovieAnalysis, fetchActorDetails } from "../services/movieAnalysis";
+import CommentsSection from "../components/CommentsSection";
 import type { MovieAnalysis, ActorDetails } from "../api/openai";
 import type { FC } from "react";
 
@@ -526,6 +527,18 @@ const MovieDetail: FC = () => {
                 )}
             </div>
             </div>
+
+            {/* Sección de Comentarios */}
+            {movie && (
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <CommentsSection
+                        mediaId={movie.id}
+                        mediaType={isTV ? 'tv' : 'movie'}
+                        title={movie.title}
+                        posterPath={movie.poster_path || undefined}
+                    />
+                </div>
+            )}
 
             {/* 🔘 Botón flotante (solo móvil) */}
             <motion.button

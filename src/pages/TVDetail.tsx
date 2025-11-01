@@ -5,6 +5,7 @@ import { getTVDetails } from "../services/tmdb";
 import { SendToChatButton } from "../components/SendToChatButton";
 import { CelestialSphere } from "../components/ui/celestial-sphere";
 import { fetchSeriesAnalysis, fetchActorDetails } from "../services/movieAnalysis";
+import CommentsSection from "../components/CommentsSection";
 import type { SeriesAnalysis, ActorDetails } from "../api/openai";
 import type { FC } from "react";
 
@@ -565,6 +566,18 @@ const TVDetail: FC = () => {
                 </div>
             </div>
             </div>
+
+            {/* Sección de Comentarios */}
+            {tv && (
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <CommentsSection
+                        mediaId={tv.id}
+                        mediaType="tv"
+                        title={tv.name}
+                        posterPath={tv.poster_path || undefined}
+                    />
+                </div>
+            )}
 
             {/* 🔘 Botón flotante (solo móvil) */}
             <motion.button

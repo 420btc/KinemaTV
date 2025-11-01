@@ -114,3 +114,18 @@ model ListItem {
   @@unique([listId, mediaId, mediaType])
   @@map("list_items")
 }
+
+// Modelo para comentarios públicos (sin necesidad de registro)
+model Comment {
+  id        String   @id @default(cuid())
+  mediaId   Int      // ID de TMDB
+  mediaType String   // "movie" o "tv"
+  username  String   // Nombre de usuario manual (sin registro)
+  content   String   // Contenido del comentario
+  title     String   // Título de la película/serie para referencia
+  posterPath String? // Poster de la película/serie
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("comments")
+}
