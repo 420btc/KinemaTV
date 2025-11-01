@@ -78,7 +78,7 @@ const TVDetail: FC = () => {
                 <img
                     src={`https://image.tmdb.org/t/p/w500${tv.poster_path}`}
                     alt={tv.name}
-                    className="w-full md:w-72 rounded-xl shadow-glow"
+                    className="w-56 h-80 object-cover rounded-xl shadow-glow flex-shrink-0"
                 />
             )}
 
@@ -151,7 +151,7 @@ const TVDetail: FC = () => {
                                     <img
                                         src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`}
                                         alt={actor.name}
-                                        className="rounded-lg mb-1"
+                                        className="w-full h-32 object-cover rounded-lg mb-1"
                                     />
                                 ) : (
                                     <div className="h-32 bg-gray-700 flex items-center justify-center text-gray-400 rounded">
@@ -196,7 +196,7 @@ const TVDetail: FC = () => {
                                             <img
                                                 src={`https://image.tmdb.org/t/p/w200${season.poster_path}`}
                                                 alt={season.name}
-                                                className="w-32 rounded-lg shadow-md"
+                                                className="w-32 h-auto object-cover rounded-lg shadow-md flex-shrink-0"
                                             />
                                         )}
                                         <p className="text-gray-300 text-sm leading-relaxed">
