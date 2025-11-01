@@ -16,8 +16,10 @@ export default function SignIn() {
 
   const handleSignIn = async () => {
     try {
-      // Usar el método de Stack Auth para iniciar sesión
-      await stackClientApp.signInWithOAuth('google');
+      // Usar el método de Stack Auth para iniciar sesión con returnTo
+      await stackClientApp.signInWithOAuth('google', {
+        returnTo: `${window.location.origin}/oauth-callback`
+      });
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
     }
@@ -26,7 +28,9 @@ export default function SignIn() {
   const handleSignUp = async () => {
     try {
       // Stack Auth maneja registro e inicio de sesión con el mismo método
-      await stackClientApp.signInWithOAuth('google');
+      await stackClientApp.signInWithOAuth('google', {
+        returnTo: `${window.location.origin}/oauth-callback`
+      });
     } catch (error) {
       console.error('Error al registrarse:', error);
     }

@@ -8,6 +8,7 @@ import Favorites from "./pages/Favorites";
 import Watchlist from "./pages/Watchlist";
 import SignIn from "./pages/SignIn";
 import SignOut from "./pages/SignOut";
+import OAuthCallback from "./pages/OAuthCallback";
 import { AuthButton } from "./components/AuthButton";
 import { useState, useEffect } from "react";
 import type { FormEvent } from "react";
@@ -139,6 +140,7 @@ function App() {
           <Route path="/watchlist" element={<Watchlist />} />
           <Route path="/auth/signin" element={<SignIn />} />
           <Route path="/auth/signout" element={<SignOut />} />
+          <Route path="/oauth-callback" element={<OAuthCallback />} />
         </Routes>
       </main>
 
