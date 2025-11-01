@@ -187,28 +187,6 @@ export function SeasonalCuration({ className = "" }: SeasonalCurationProps) {
     loadSeasonalMovies();
   }, [seasonalLists]);
 
-  const getSeasonName = () => {
-    const season = getCurrentSeason();
-    const names = {
-      spring: 'Primavera',
-      summer: 'Verano',
-      autumn: 'Otoño',
-      winter: 'Invierno'
-    };
-    return names[season as keyof typeof names];
-  };
-
-  const getSeasonIcon = () => {
-    const season = getCurrentSeason();
-    const icons = {
-      spring: '🌸',
-      summer: '☀️',
-      autumn: '🍂',
-      winter: '❄️'
-    };
-    return icons[season as keyof typeof icons];
-  };
-
   if (loading) {
     return (
       <div className={`${className}`}>

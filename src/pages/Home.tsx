@@ -12,6 +12,7 @@ import { FavoriteButton } from "../components/FavoriteButton";
 import { WatchlistButton } from "../components/WatchlistButton";
 import { CelestialSphere } from "../components/ui/celestial-sphere";
 import { SeasonalCuration } from "../components/SeasonalCuration";
+import { KinemaHero } from "../components/KinemaHero";
 import type { Movie } from "../services/tmdb";
 
 // Tipo de ref (permite null sin romper TypeScript)
@@ -195,6 +196,9 @@ export default function Home() {
                 particleSize={2.5}
                 className="fixed top-0 left-0 w-full h-full z-0"
             />
+            
+            {/* Hero Section */}
+            <KinemaHero />
             
             {/* Contenido principal */}
             <div className="relative z-10 px-2 sm:px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
