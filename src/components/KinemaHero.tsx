@@ -58,8 +58,8 @@ export function KinemaHero() {
       </div>
 
       {/* Tarjetas animadas de películas */}
-      <ContainerScroll className="h-[300vh] relative -mt-4">
-        <div className="sticky left-0 top-0 h-svh w-full pt-2 flex items-start lg:items-center justify-center px-4 lg:pt-16">
+      <ContainerScroll className="h-[200vh] sm:h-[250vh] lg:h-[300vh] relative -mt-4">
+        <div className="sticky left-0 top-0 h-svh w-full pt-8 sm:pt-4 lg:pt-2 flex items-center lg:items-center justify-center px-4 lg:pt-16">
           <CardsContainer className="mx-auto h-[400px] sm:h-[450px] md:h-[500px] lg:h-[600px] xl:h-[650px] w-[280px] sm:w-[320px] md:w-[380px] lg:w-[450px] xl:w-[500px]">
             {movies.map((movie, index) => (
               <CardTransformed
