@@ -1,9 +1,6 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "functions": {
-    "api/server.js": {}
-  },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/server" },
     { "source": "/(.*)", "destination": "/" }
