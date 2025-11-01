@@ -6,6 +6,7 @@ import MovieDetail from "./pages/MovieDetail";
 import TVDetail from "./pages/TVDetail";
 import Favorites from "./pages/Favorites";
 import Watchlist from "./pages/Watchlist";
+import TierList from "./pages/TierList";
 import SignIn from "./pages/SignIn";
 import SignOut from "./pages/SignOut";
 import OAuthCallback from "./pages/OAuthCallback";
@@ -53,6 +54,7 @@ function App() {
             <Link to="/" className="hover:text-orange-400 transition">Inicio</Link>
             <Link to="/explore" className="hover:text-orange-400 transition">Explorar</Link>
             <Link to="/search" className="hover:text-orange-400 transition">Buscar</Link>
+            <Link to="/tierlist" className="hover:text-orange-400 transition">Tier List</Link>
             <Link to="/favorites" className="hover:text-orange-400 transition">Favoritos</Link>
             <Link to="/watchlist" className="hover:text-orange-400 transition">Watchlist</Link>
 
@@ -104,6 +106,7 @@ function App() {
             <Link to="/" className="hover:text-orange-400 transition" onClick={() => setIsOpen(false)}>Inicio</Link>
             <Link to="/explore" className="hover:text-orange-400 transition" onClick={() => setIsOpen(false)}>Explorar</Link>
             <Link to="/search" className="hover:text-orange-400 transition" onClick={() => setIsOpen(false)}>Buscar</Link>
+            <Link to="/tierlist" className="hover:text-orange-400 transition" onClick={() => setIsOpen(false)}>Tier List</Link>
 
             {/* Buscador mobile */}
             <form
@@ -134,6 +137,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/tierlist" element={<TierList />} />
           <Route path="/movie/:id" element={<MovieDetail />} />
           <Route path="/tv/:id" element={<TVDetail />} />
           <Route path="/favorites" element={<Favorites />} />
