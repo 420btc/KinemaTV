@@ -151,29 +151,29 @@ function App() {
       {/* ✅ Footer */}
       <footer className="text-center text-xs sm:text-sm text-gray-400 py-6 border-t border-[#1E2533] bg-[#0A0E1A]">
         <p>
-          Este producto usa la API de{" "}
+         {" "}
           <a
             href="https://www.themoviedb.org/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-orange-400 hover:underline"
           >
-            TMDb
+            
           </a>
-          , pero no está respaldado ni certificado por TMDb.
+           
         </p>
 
         <p className="mt-3">
-          Diseñado y desarrollado por{" "}
+          {" "}
           <a
             href="https://juancatena.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent font-semibold hover:opacity-90 transition"
           >
-            Juan Catena
+            
           </a>{" "}
-          — <span className="text-gray-500">Scenra © 2025</span>
+         <span className="text-gray-500">YourTMDB © 2025</span>
         </p>
       </footer>
 
