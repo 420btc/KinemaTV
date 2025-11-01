@@ -49,7 +49,7 @@ export function KinemaHero() {
     <section className="relative">
       {/* Título KINEMA TV */}
       <div className="text-center relative z-20">
-        <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold text-kinematv-yellow tracking-wider permanent-marker-regular">
+        <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold text-kinematv-yellow tracking-wider permanent-marker-regular drop-shadow-2xl shadow-black/80">
           KINEMA TV
         </h1>
         <p className="text-lg md:text-xl text-gray-300 mt-1 max-w-2xl mx-auto">
