@@ -7,10 +7,15 @@ export default function Search() {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [selectedYear, setSelectedYear] = useState<number | null>(null);
 
     // leer query desde la URL
     const { search } = useLocation();
     const query = new URLSearchParams(search).get("query") || "";
+
+    // Generar lista de años (desde 1900 hasta el año actual)
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: currentYear - 1899 }, (_, i) => currentYear - i);
 
     useEffect(() => {
         if (!query.trim()) return;
@@ -18,18 +23,48 @@ export default function Search() {
         setLoading(true);
         setError(null);
 
-        searchMovies(query)
+        searchMovies(query, selectedYear || undefined)
             .then((data) => setMovies(data.results))
             .catch(() => setError("Error en la búsqueda"))
             .finally(() => setLoading(false));
-    }, [query]);
+    }, [query, selectedYear]);
+
+    const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const year = event.target.value;
+        setSelectedYear(year ? parseInt(year) : null);
+    };
 
     return (
         <div className="p-4">
             <h2 className="text-2xl font-bold mb-4">
                 Resultados de búsqueda para:{" "}
                 <span className="text-yellow-400">{query}</span>
+                {selectedYear && (
+                    <span className="text-gray-400 text-lg ml-2">
+                        (año {selectedYear})
+                    </span>
+                )}
             </h2>
+
+            {/* Filtro por año */}
+            <div className="mb-6">
+                <label htmlFor="year-filter" className="block text-sm font-medium text-gray-300 mb-2">
+                    Filtrar por año:
+                </label>
+                <select
+                    id="year-filter"
+                    value={selectedYear || ""}
+                    onChange={handleYearChange}
+                    className="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5"
+                >
+                    <option value="">Todos los años</option>
+                    {years.map((year) => (
+                        <option key={year} value={year}>
+                            {year}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
             {/* Estados */}
             {loading && <p>Cargando...</p>}
@@ -62,9 +97,16 @@ export default function Search() {
                             <h3 className="text-base font-semibold truncate">
                                 {movie.title}
                             </h3>
-                            <p className="text-yellow-400 text-sm mt-1">
-                                ⭐ {movie.vote_average.toFixed(1)}
-                            </p>
+                            <div className="flex justify-between items-center mt-1">
+                                <p className="text-yellow-400 text-sm">
+                                    ⭐ {movie.vote_average.toFixed(1)}
+                                </p>
+                                {movie.release_date && (
+                                    <p className="text-gray-400 text-sm">
+                                        {new Date(movie.release_date).getFullYear()}
+                                    </p>
+                                )}
+                            </div>
                         </div>
                     </Link>
                 ))}

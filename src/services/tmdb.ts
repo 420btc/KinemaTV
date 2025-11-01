@@ -8,6 +8,8 @@ export interface Movie {
     poster_path: string | null;
     vote_average: number;
     genre_ids?: number[];
+    release_date?: string; // fecha de lanzamiento para películas
+    first_air_date?: string; // fecha de lanzamiento para series
 }
 
 // 🎬 --- PELÍCULAS ---
@@ -30,10 +32,14 @@ export async function getTrendingMovies(): Promise<{ results: Movie[] }> {
 }
 
 // 🔎 Buscar Películas
-export async function searchMovies(query: string): Promise<{ results: Movie[] }> {
-    const res = await fetch(
-        `${BASE_URL}/search/movie?api_key=${API_KEY}&language=es-ES&query=${encodeURIComponent(query)}`
-    );
+export async function searchMovies(query: string, year?: number): Promise<{ results: Movie[] }> {
+    let url = `${BASE_URL}/search/movie?api_key=${API_KEY}&language=es-ES&query=${encodeURIComponent(query)}`;
+    
+    if (year) {
+        url += `&primary_release_year=${year}`;
+    }
+    
+    const res = await fetch(url);
     if (!res.ok) throw new Error("Error al buscar películas");
     return res.json();
 }
