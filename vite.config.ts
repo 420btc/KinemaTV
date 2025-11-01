@@ -5,7 +5,9 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   define: {
-    'process.env': process.env,
+    'process.env.VITE_TMDB_API_KEY': JSON.stringify(process.env.VITE_TMDB_API_KEY),
+    'process.env.VITE_STACK_PROJECT_ID': JSON.stringify(process.env.VITE_STACK_PROJECT_ID),
+    'process.env.VITE_STACK_PUBLISHABLE_CLIENT_KEY': JSON.stringify(process.env.VITE_STACK_PUBLISHABLE_CLIENT_KEY),
   },
   build: {
     rollupOptions: {
