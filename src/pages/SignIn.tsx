@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@stackframe/stack';
 import { stackClientApp } from '../lib/stack';
+import CelestialSphere from '../components/ui/celestial-sphere';
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -37,8 +38,15 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0e1a] flex items-center justify-center p-4">
-      <div className="bg-[#101523] rounded-lg p-8 w-full max-w-md">
+    <div className="relative min-h-screen bg-[#0a0e1a] flex items-center justify-center p-4">
+      <CelestialSphere 
+        hue={11}
+        speed={0.9}
+        zoom={1.2}
+        particleSize={1.5}
+        className="fixed top-0 left-0 w-full h-full z-0"
+      />
+      <div className="relative z-10 bg-[#101523] rounded-lg p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">KinemaTV</h1>
           <p className="text-gray-400">Descubre tu próxima película favorita</p>

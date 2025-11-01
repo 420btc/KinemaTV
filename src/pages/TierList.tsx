@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { searchMovies, type Movie } from "../services/tmdb";
 import html2canvas from "html2canvas";
+import CelestialSphere from '../components/ui/celestial-sphere';
 
 interface TierLevel {
   id: string;
@@ -129,8 +130,15 @@ export default function TierList() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0E1A] text-white p-8">
-      <div className="max-w-full mx-auto">
+    <div className="relative min-h-screen bg-[#0A0E1A] text-white p-8">
+      <CelestialSphere 
+        hue={11}
+        speed={0.9}
+        zoom={1.2}
+        particleSize={1.5}
+        className="fixed top-0 left-0 w-full h-full z-0"
+      />
+      <div className="max-w-full mx-auto relative z-10">
         {/* Header */}
         <div className="mb-10">
           <h1 className="text-5xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
@@ -286,6 +294,6 @@ export default function TierList() {
            </div>
          </div>
       </div>
-    </div>
-  );
-}
+     </div>
+   );
+ }

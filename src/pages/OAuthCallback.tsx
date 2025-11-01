@@ -4,6 +4,7 @@ import { useUser } from '@stackframe/stack';
 import { createOrUpdateUserAPI } from '../services/userService';
 import type { StackUserExtended } from '../types/stack-user';
 import { getEmailFromUser, getNameFromUser, getAvatarFromUser } from '../types/stack-user';
+import CelestialSphere from '../components/ui/celestial-sphere';
 
 const OAuthCallback: React.FC = () => {
   const navigate = useNavigate();
@@ -111,19 +112,25 @@ const OAuthCallback: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="max-w-md w-full space-y-8 text-center">
-          <div className="text-red-600">
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0e1a] relative">
+        <CelestialSphere 
+          hue={0}
+          speed={0.6}
+          zoom={0.9}
+          particleSize={1.1}
+        />
+        <div className="max-w-md w-full space-y-8 text-center relative z-10">
+          <div className="text-red-400">
             <svg className="mx-auto h-12 w-12 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 18.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-white mb-2">
               Error de Autenticación
             </h2>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-300 mb-4">
               {error}
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-400">
               Serás redirigido automáticamente...
             </p>
           </div>
@@ -133,21 +140,27 @@ const OAuthCallback: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-[#0a0e1a] relative">
+      <CelestialSphere 
+        hue={200}
+        speed={0.8}
+        zoom={1.0}
+        particleSize={1.3}
+      />
+      <div className="max-w-md w-full space-y-8 relative z-10">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mx-auto mb-4"></div>
+          <h2 className="mt-6 text-3xl font-extrabold text-white">
             Completando autenticación...
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-gray-300">
             Por favor espera mientras procesamos tu inicio de sesión con Google.
           </p>
           <div className="mt-4">
             <div className="flex justify-center space-x-1">
-              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
-              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+              <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+              <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
             </div>
           </div>
         </div>

@@ -12,6 +12,7 @@ import {
 import { Plus, Check } from "lucide-react";
 import type { Movie } from "../services/tmdb";
 import toast from "react-hot-toast";
+import CelestialSphere from '../components/ui/celestial-sphere';
 
 const GENRES = [
     { id: 28, name: "Acción" },
@@ -107,9 +108,17 @@ export default function Explore() {
     const displayedItems = activeTab === "mylist" ? myList : items;
 
     return (
-        <div className="p-4 sm:p-6">
-            {/* 🔹 Selector Películas / Series */}
-            <div className="flex flex-wrap justify-center gap-3 mb-6">
+        <div className="relative min-h-screen">
+            <CelestialSphere 
+                hue={11}
+                speed={0.9}
+                zoom={1.2}
+                particleSize={1.5}
+                className="fixed top-0 left-0 w-full h-full z-0"
+            />
+            <div className="relative z-10 p-4 sm:p-6">
+                {/* 🔹 Selector Películas / Series */}
+                <div className="flex flex-wrap justify-center gap-3 mb-6">
                 {["movie", "tv"].map((type) => (
                     <button
                         key={type}
@@ -222,6 +231,7 @@ export default function Explore() {
                     ))}
                 </motion.div>
             )}
+            </div>
         </div>
     );
 }

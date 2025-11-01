@@ -3,6 +3,7 @@ import { useLocation, Link, useNavigate } from "react-router-dom";
 import type { Movie } from "../services/tmdb";
 import { searchMovies, discoverMovies } from "../services/tmdb";
 import type { FormEvent } from "react";
+import CelestialSphere from '../components/ui/celestial-sphere';
 
 export default function Search() {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -84,8 +85,16 @@ export default function Search() {
     }, [query]);
 
     return (
-        <div className="p-4">
-            <h2 className="text-2xl font-bold mb-6">Buscar Películas</h2>
+        <div className="relative min-h-screen">
+            <CelestialSphere 
+                hue={11}
+                speed={0.9}
+                zoom={1.2}
+                particleSize={1.5}
+                className="fixed top-0 left-0 w-full h-full z-0"
+            />
+            <div className="relative z-10 p-4">
+                <h2 className="text-2xl font-bold mb-6">Buscar Películas</h2>
 
             {/* Campo de búsqueda */}
             <form onSubmit={handleLocalSearch} className="mb-8">
@@ -257,6 +266,7 @@ export default function Search() {
                     </p>
                 </div>
             )}
+            </div>
         </div>
     );
 }

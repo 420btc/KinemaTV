@@ -33,9 +33,9 @@ export function AuthButton() {
         </div>
         <button
           onClick={() => window.location.href = '/auth/signout'}
-          className="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+          className="flex items-center gap-2 px-3 py-1.5 bg-red-500/20 backdrop-blur-md border border-red-400/30 hover:bg-red-500/30 hover:border-red-400/50 text-white rounded-full transition-all duration-300 shadow-lg hover:shadow-xl text-sm font-medium"
         >
-          <LogOut size={16} />
+          <LogOut size={14} />
           <span>Cerrar Sesión</span>
         </button>
       </div>
