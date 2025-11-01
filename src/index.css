@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Scrollbar personalizada de los carruseles */
+.custom-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #f59e0b, #facc15);
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #fde68a, #facc15);
+}
+
+/* Firefox */
+.custom-scroll {
+  scrollbar-color: #facc15 rgba(255, 255, 255, 0.05);
+  scrollbar-width: thin;
+}
