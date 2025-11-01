@@ -117,7 +117,7 @@ const MovieDetail: FC = () => {
                 <img
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                     alt={movie.title}
-                    className="w-full md:w-72 rounded-xl shadow-glow"
+                    className="w-56 h-80 object-cover rounded-xl shadow-glow flex-shrink-0"
                 />
             )}
 
