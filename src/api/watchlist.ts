@@ -15,33 +15,34 @@ export async function getWatchlist(userId: string) {
 
 export async function addToWatchlist(data: {
   userId: string;
-  movieId: number;
+  mediaId: number;
+  mediaType: string;
   title: string;
   posterPath?: string;
-  releaseDate?: string;
 }) {
   try {
     // Verificar si ya existe
     const existing = await prisma.watchlist.findUnique({
       where: {
-        userId_movieId: {
+        userId_mediaId_mediaType: {
           userId: data.userId,
-          movieId: data.movieId,
+          mediaId: data.mediaId,
+          mediaType: data.mediaType,
         },
       },
     });
 
     if (existing) {
-      throw new Error('Movie already in watchlist');
+      throw new Error('Media already in watchlist');
     }
 
     const watchlistItem = await prisma.watchlist.create({
       data: {
         userId: data.userId,
-        movieId: data.movieId,
+        mediaId: data.mediaId,
+        mediaType: data.mediaType,
         title: data.title,
         posterPath: data.posterPath,
-        releaseDate: data.releaseDate,
       },
     });
 
@@ -52,13 +53,14 @@ export async function addToWatchlist(data: {
   }
 }
 
-export async function removeFromWatchlist(userId: string, movieId: number) {
+export async function removeFromWatchlist(userId: string, mediaId: number, mediaType: string) {
   try {
     const deleted = await prisma.watchlist.delete({
       where: {
-        userId_movieId: {
+        userId_mediaId_mediaType: {
           userId,
-          movieId,
+          mediaId,
+          mediaType,
         },
       },
     });

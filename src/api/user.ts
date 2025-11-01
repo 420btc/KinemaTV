@@ -3,23 +3,23 @@ import { prisma } from '../lib/prisma.js';
 export async function createOrUpdateUser(userData: {
   id: string;
   email: string;
-  displayName?: string;
-  profileImageUrl?: string;
+  name?: string;
+  avatar?: string;
 }) {
   try {
     const user = await prisma.user.upsert({
       where: { id: userData.id },
       update: {
         email: userData.email,
-        displayName: userData.displayName,
-        profileImageUrl: userData.profileImageUrl,
+        name: userData.name,
+        avatar: userData.avatar,
         updatedAt: new Date(),
       },
       create: {
         id: userData.id,
         email: userData.email,
-        displayName: userData.displayName,
-        profileImageUrl: userData.profileImageUrl,
+        name: userData.name,
+        avatar: userData.avatar,
       },
     });
 
@@ -38,7 +38,7 @@ export async function getUserById(id: string) {
         favorites: true,
         watchlist: true,
         ratings: true,
-        movieLists: {
+        lists: {
           include: {
             items: true,
           },
