@@ -170,7 +170,7 @@ export const ChatPopup: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [contextData, messages]);
+  }, [contextData, messages, updateMovieData, updateSeriesData]);
 
   // Escuchar eventos de "Enviar al Chat"
   useEffect(() => {
